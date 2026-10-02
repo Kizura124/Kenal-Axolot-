@@ -55,6 +55,46 @@
     });
     perbaruiTombolTema();
 
+    // ---------- 2b. MENU SAMPING (tombol tiga garis) ----------
+    var menuBtn   = document.getElementById('menuBtn');
+    var menuClose = document.getElementById('menuClose');
+    var menuOver  = document.getElementById('menuOverlay');
+    var drawer    = document.getElementById('menu');
+    if (menuBtn && drawer) {
+      var bukaMenu = function () {
+        root.classList.add('menu-open');
+        menuBtn.setAttribute('aria-expanded', 'true');
+        menuBtn.setAttribute('aria-label', 'Tutup menu');
+        setTimeout(function () { menuClose.focus(); }, 60);
+      };
+      var tutupMenu = function (balikFokus) {
+        root.classList.remove('menu-open');
+        menuBtn.setAttribute('aria-expanded', 'false');
+        menuBtn.setAttribute('aria-label', 'Buka menu');
+        if (balikFokus) menuBtn.focus();
+      };
+      var menuTerbuka = function () { return root.classList.contains('menu-open'); };
+
+      menuBtn.addEventListener('click', function () { menuTerbuka() ? tutupMenu(true) : bukaMenu(); });
+      menuClose.addEventListener('click', function () { tutupMenu(true); });
+      menuOver.addEventListener('click', function () { tutupMenu(true); });
+      // Memilih salah satu menu langsung menutup menu
+      drawer.addEventListener('click', function (e) {
+        if (e.target.closest('a')) tutupMenu(false);
+      });
+      document.addEventListener('keydown', function (e) {
+        if (!menuTerbuka()) return;
+        if (e.key === 'Escape') { tutupMenu(true); return; }
+        // Tab berputar di dalam menu selama menu terbuka
+        if (e.key === 'Tab') {
+          var fokus = drawer.querySelectorAll('a[href], button');
+          var awal = fokus[0], akhir = fokus[fokus.length - 1];
+          if (e.shiftKey && document.activeElement === awal) { e.preventDefault(); akhir.focus(); }
+          else if (!e.shiftKey && document.activeElement === akhir) { e.preventDefault(); awal.focus(); }
+        }
+      });
+    }
+
     // ---------- 3. BAR PROGRES MEMBACA (halaman utama) ----------
     var bar = document.getElementById('progress');
     if (bar) {
@@ -71,7 +111,7 @@
     }
 
     // ---------- 4. MENU AKTIF MENGIKUTI BAGIAN YANG DIBACA (halaman utama) ----------
-    var tautan = document.querySelectorAll('.nav a[href^="#"]:not(.logo)');
+    var tautan = document.querySelectorAll('.drawer a[href^="#"]');
     var bagian = document.querySelectorAll('section[id]');
     if ('IntersectionObserver' in window && tautan.length) {
       var spy = new IntersectionObserver(function (daftar) {
