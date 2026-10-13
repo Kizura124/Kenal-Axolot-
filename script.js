@@ -153,6 +153,28 @@
       });
     }
 
+    // ---------- 5b. GARIS HIAS JUDUL MEMANJANG SAAT TERLIHAT ----------
+    var judul = document.querySelectorAll('h2');
+    if ('IntersectionObserver' in window) {
+      var garis = new IntersectionObserver(function (daftar) {
+        daftar.forEach(function (d) {
+          if (d.isIntersecting) { d.target.classList.add('tampak'); garis.unobserve(d.target); }
+        });
+      }, { threshold: 0.6 });
+      judul.forEach(function (h) { garis.observe(h); });
+    }
+
+    // ---------- 5c. TOMBOL KEMBALI KE ATAS ----------
+    var keAtas = document.getElementById('toTop');
+    if (keAtas) {
+      var atur = function () { keAtas.classList.toggle('tampak', window.scrollY > 500); };
+      window.addEventListener('scroll', atur, { passive: true });
+      atur();
+      keAtas.addEventListener('click', function () {
+        window.scrollTo({ top: 0, behavior: kurangiGerak ? 'auto' : 'smooth' });
+      });
+    }
+
     // ---------- 6. FORMULIR PERTANYAAN (hanya di index.html) ----------
     var formTanya = document.getElementById('askForm');
     if (formTanya) {
@@ -162,9 +184,7 @@
       var nmTanya    = document.getElementById('askNama');
       var emTanya    = document.getElementById('askEmail');
       var psTanya    = document.getElementById('askPesan');
-      var hitung     = document.getElementById('askHitung');
       var pencacah   = document.getElementById('askCounter');
-      var jebakan    = document.getElementById('askJebakan');
       var btnTanya   = document.getElementById('askBtn');
       var labelBtn   = btnTanya.querySelector('.label');
       var stTanya    = document.getElementById('askStatus');
@@ -202,9 +222,16 @@
         labelBtn.textContent = 'Kirim';
       };
 
+      // Kolom pertanyaan tumbuh mengikuti isi; penghitung hanya muncul saat hampir penuh
+      var sesuaikanTinggi = function () {
+        psTanya.style.height = 'auto';
+        psTanya.style.height = (psTanya.scrollHeight + 2) + 'px';
+      };
       psTanya.addEventListener('input', function () {
-        hitung.textContent = psTanya.value.length;
-        pencacah.classList.toggle('hampir', psTanya.value.length >= 450);
+        sesuaikanTinggi();
+        var n = psTanya.value.length;
+        if (n >= 450) { pencacah.textContent = 'Sisa ' + (500 - n) + ' karakter'; pencacah.classList.add('hampir'); }
+        else { pencacah.textContent = ''; pencacah.classList.remove('hampir'); }
         if (psTanya.hasAttribute('aria-invalid')) cekPesan();
       });
       nmTanya.addEventListener('input', function () { if (nmTanya.hasAttribute('aria-invalid')) cekNama(); });
@@ -215,7 +242,8 @@
       var tampilSukses = function (nama, teks) {
         bukaTombol();
         formTanya.reset();
-        hitung.textContent = '0';
+        psTanya.style.height = '';
+        pencacah.textContent = '';
         pencacah.classList.remove('hampir');
         document.getElementById('askDoneNama').textContent = nama;
         document.getElementById('askDoneTeks').textContent = teks;
@@ -257,9 +285,6 @@
         btnTanya.disabled = true;
         btnTanya.classList.add('loading');
         labelBtn.textContent = 'Mengirim…';
-
-        // Robot spam biasanya mengisi kolom jebakan: pura-pura berhasil, tapi tidak dikirim
-        if (jebakan.value) { setTimeout(sukses, 1000); return; }
 
         if (FORM_ENDPOINT) {
           fetch(FORM_ENDPOINT, {
@@ -399,3 +424,4 @@
     });
   });
 })();
+        
