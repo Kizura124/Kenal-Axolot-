@@ -182,7 +182,7 @@ html.menu-open .drawer li { animation: slideIn .5s cubic-bezier(.2,.8,.2,1) both
 /* Teks hero muncul berurutan dari bawah */
 .hero h1  { animation: rise .8s .5s  cubic-bezier(.2,.8,.2,1) both; }
 .hero p   { animation: rise .8s .65s cubic-bezier(.2,.8,.2,1) both; }
-.hero .btn{ animation: rise .8s .8s  cubic-bezier(.2,.8,.2,1) backwards; }  /* backwards: hover tetap bisa menggeser tombol */
+.hero .btn{ animation: rise .8s .8s cubic-bezier(.2,.8,.2,1) backwards, btnPulse 2.8s 2s ease-in-out infinite; }  /* backwards: hover tetap bisa menggeser tombol */
 
 .btn {
   display: inline-block; background: var(--btn-bg); color: var(--btn-text);
@@ -348,36 +348,31 @@ footer small { display: block; opacity: .85; margin-top: .3rem; }
 .field { margin-bottom: 1.1rem; }
 .field label { display: block; font-weight: 700; font-size: 1rem; margin-bottom: .35rem; }
 .input-wrap { position: relative; }
-.field input[type="email"], .field input[type="password"], .field input[type="text"] {
-  width: 100%; font: inherit; font-size: 1.05rem; color: var(--ink);
-  background: var(--bg); border: 1.5px solid var(--line); border-radius: 12px;
-  padding: .8rem 1rem; transition: border-color .2s, box-shadow .2s;
+.field input[type="email"], .field input[type="password"], .field input[type="text"], /* Textarea: tampilan sama dengan kolom lain, hanya tinggi menyesuaikan isi */
+.field textarea { display: block; resize: none; overflow: hidden; line-height: 1.5; min-height: calc(3 * 1.5em + 1.6rem + 3px); }
+/* Penghitung: tersembunyi, baru muncul saat hampir mencapai batas 500 karakter */
+.counter { display: none; text-align: right; font-size: .9rem; margin: .25rem 0 0; max-width: none; }
+.counter.hampir { display: block; color: var(--danger); font-weight: 700; animation: rise .3s ease both; }
+
+/* Tombol kirim: kilatan cahaya saat disorot, pesawat kertas terbang saat mengirim */
+.ask-card .btn.submit { position: relative; overflow: hidden; animation: btnPulse 2.6s 1.5s ease-in-out infinite; }
+.ask-card .btn.submit:disabled { animation: none; }
+.ask-card .btn.submit::after {
+  content: ""; position: absolute; top: 0; left: -60%; width: 40%; height: 100%;
+  background: linear-gradient(100deg, transparent, rgba(255,255,255,.4), transparent);
+  transform: skewX(-20deg); pointer-events: none;
 }
-.field input::placeholder { color: var(--muted); opacity: .7; }
-.field input:hover { border-color: var(--teal); }
-.field input:focus { outline: none; border-color: var(--teal); box-shadow: 0 0 0 4px var(--ring); }
-.field input[aria-invalid="true"] { border-color: var(--danger); }
-.field input[aria-invalid="true"]:focus { box-shadow: 0 0 0 4px rgba(179,38,30,.15); }
-.input-wrap input { padding-right: 3.2rem; }
-
-.error { color: var(--danger); font-size: .95rem; margin-top: .35rem; max-width: none; min-height: 0; }
-.error:empty { display: none; }
-.error { animation: rise .3s ease both; }
-
-/* Tombol lihat/sembunyikan sandi */
-.pw-toggle {
-  position: absolute; top: 50%; right: .4rem; transform: translateY(-50%);
-  width: 40px; height: 40px; border: none; border-radius: 10px; background: none;
-  color: var(--muted); cursor: pointer; display: grid; place-items: center;
-  transition: color .2s, background .2s;
+.ask-card .btn.submit:hover::after { animation: shine .8s ease; }
+@keyframes shine { to { left: 130%; } }
+.ask-card .btn.submit.loading::before { display: none; }          /* ganti spinner dengan pesawat */
+.plane { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; transition: transform .3s; }
+.btn.submit:hover .plane { transform: translate(3px, -3px); }
+.btn.submit.loading .plane { animation: fly .9s ease-in infinite; }
+@keyframes fly {
+  0%   { transform: translate(0, 0); opacity: 1; }
+  45%  { transform: translate(22px, -18px); opacity: 0; }
+  46%  { transform: translate(-22px, 18px); opacity: 0; }
+  100% { transform: translate(0, 0); opacity: 1; }
 }
-.pw-toggle:hover { color: var(--heading); background: var(--ring); }
-.pw-toggle svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
-.pw-toggle .icon-hide { display: none; }
-.pw-toggle[aria-pressed="true"] .icon-show { display: none; }
-.pw-toggle[aria-pressed="true"] .icon-hide { display: block; }
 
-/* ===== 5. BARIS INGAT SAYA / LUPA SANDI ===== */
-.row { display: flex; justify-content: space-between; align-items: center; gap: .6rem 1rem; flex-wrap: wrap; margin: .2rem 0 1.4rem; font-size: 1rem; }
-.check { display: inline-flex; align-items: center; gap: .55rem; cursor: pointer; }
-.check input { width: 20px; height: 20px; accent-
+/* Tampilan sukses: lingkaran tergambar, centang tergambar, percikan war
