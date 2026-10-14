@@ -59,12 +59,12 @@
         <h1>Masuk</h1>
         <p class="sub">Selamat datang kembali. Silakan isi data akunmu.</p>
 
-        <!-- novalidate: pesan kesalahan diatur sendiri oleh login.js agar berbahasa Indonesia -->
+        <!-- novalidate: pesan kesalahan diatur sendiri oleh script.js agar berbahasa Indonesia -->
         <form id="loginForm" novalidate>
           <div class="field">
-            <label for="email">Email</label>
-            <input type="email" id="email" name="email" placeholder="nama@email.com" autocomplete="email" required aria-describedby="email-error">
-            <p class="error" id="email-error"></p>
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" placeholder="Nama penggunamu" autocomplete="username" autocapitalize="none" autocorrect="off" spellcheck="false" required aria-describedby="username-error">
+            <p class="error" id="username-error"></p>
           </div>
 
           <div class="field">
