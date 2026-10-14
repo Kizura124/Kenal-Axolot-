@@ -184,6 +184,7 @@
       var nmTanya    = document.getElementById('askNama');
       var emTanya    = document.getElementById('askEmail');
       var psTanya    = document.getElementById('askPesan');
+      var hitung     = document.getElementById('askHitung');
       var pencacah   = document.getElementById('askCounter');
       var btnTanya   = document.getElementById('askBtn');
       var labelBtn   = btnTanya.querySelector('.label');
@@ -222,16 +223,10 @@
         labelBtn.textContent = 'Kirim';
       };
 
-      // Kolom pertanyaan tumbuh mengikuti isi; penghitung hanya muncul saat hampir penuh
-      var sesuaikanTinggi = function () {
-        psTanya.style.height = 'auto';
-        psTanya.style.height = (psTanya.scrollHeight + 2) + 'px';
-      };
+      // Penghitung karakter: merah saat hampir mencapai batas 500
       psTanya.addEventListener('input', function () {
-        sesuaikanTinggi();
-        var n = psTanya.value.length;
-        if (n >= 450) { pencacah.textContent = 'Sisa ' + (500 - n) + ' karakter'; pencacah.classList.add('hampir'); }
-        else { pencacah.textContent = ''; pencacah.classList.remove('hampir'); }
+        hitung.textContent = psTanya.value.length;
+        pencacah.classList.toggle('hampir', psTanya.value.length >= 450);
         if (psTanya.hasAttribute('aria-invalid')) cekPesan();
       });
       nmTanya.addEventListener('input', function () { if (nmTanya.hasAttribute('aria-invalid')) cekNama(); });
@@ -242,8 +237,7 @@
       var tampilSukses = function (nama, teks) {
         bukaTombol();
         formTanya.reset();
-        psTanya.style.height = '';
-        pencacah.textContent = '';
+        hitung.textContent = '0';
         pencacah.classList.remove('hampir');
         document.getElementById('askDoneNama').textContent = nama;
         document.getElementById('askDoneTeks').textContent = teks;
@@ -424,4 +418,4 @@
     });
   });
 })();
-        
+          
