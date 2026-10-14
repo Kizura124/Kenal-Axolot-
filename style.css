@@ -287,6 +287,46 @@ footer small { display: block; opacity: .85; margin-top: .3rem; }
   .bubble { display: none; }
 }
 
+/* ==========================================================
+   ANIMASI TAMBAHAN
+   ========================================================== */
+
+/* Tombol berdenyut halus untuk menarik perhatian */
+@keyframes btnPulse {
+  0%   { box-shadow: 0 0 0 0 rgba(79,184,178,.55); }
+  70%  { box-shadow: 0 0 0 14px rgba(79,184,178,0); }
+  100% { box-shadow: 0 0 0 0 rgba(79,184,178,0); }
+}
+
+/* Garis hias di bawah judul bagian, memanjang saat judul terlihat */
+h2::after {
+  content: ""; display: block; width: 0; height: 4px; margin-top: .5rem; border-radius: 2px;
+  background: linear-gradient(90deg, var(--teal), var(--pink-deep));
+  transition: width .9s .2s cubic-bezier(.2,.8,.2,1);
+}
+h2.tampak::after { width: 64px; }
+
+/* Foto galeri memudar masuk */
+.ph img { animation: fadeIn .9s ease both; }
+
+/* Tombol kembali ke atas */
+.to-top {
+  position: fixed; right: 1rem; bottom: 1rem; z-index: 15; width: 48px; height: 48px; border-radius: 50%;
+  border: none; cursor: pointer; background: var(--btn-bg); color: var(--btn-text);
+  display: grid; place-items: center; box-shadow: var(--shadow);
+  opacity: 0; visibility: hidden; transform: translateY(24px) scale(.7);
+  transition: opacity .35s, transform .35s cubic-bezier(.34,1.56,.64,1), visibility 0s .35s, background .2s;
+}
+.to-top.tampak { opacity: 1; visibility: visible; transform: none; transition: opacity .35s, transform .35s cubic-bezier(.34,1.56,.64,1), background .2s; }
+.to-top:hover { background: var(--btn-hover); }
+.to-top svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+.to-top:hover svg { animation: upDown .6s ease-in-out infinite; }
+@keyframes upDown { 0%, 100% { transform: translateY(2px); } 50% { transform: translateY(-3px); } }
+
+
+/* ==========================================================
+   FORMULIR PERTANYAAN (index.html) & HALAMAN LOGIN (login.html)
+   ========================================================== */
 
 /* ===========================================================
    KHUSUS HALAMAN LOGIN (login.html)
@@ -346,33 +386,4 @@ footer small { display: block; opacity: .85; margin-top: .3rem; }
 
 /* ===== 4. KOLOM ISIAN ===== */
 .field { margin-bottom: 1.1rem; }
-.field label { display: block; font-weight: 700; font-size: 1rem; margin-bottom: .35rem; }
-.input-wrap { position: relative; }
-.field input[type="email"], .field input[type="password"], .field input[type="text"], /* Textarea: tampilan sama dengan kolom lain, hanya tinggi menyesuaikan isi */
-.field textarea { display: block; resize: none; overflow: hidden; line-height: 1.5; min-height: calc(3 * 1.5em + 1.6rem + 3px); }
-/* Penghitung: tersembunyi, baru muncul saat hampir mencapai batas 500 karakter */
-.counter { display: none; text-align: right; font-size: .9rem; margin: .25rem 0 0; max-width: none; }
-.counter.hampir { display: block; color: var(--danger); font-weight: 700; animation: rise .3s ease both; }
-
-/* Tombol kirim: kilatan cahaya saat disorot, pesawat kertas terbang saat mengirim */
-.ask-card .btn.submit { position: relative; overflow: hidden; animation: btnPulse 2.6s 1.5s ease-in-out infinite; }
-.ask-card .btn.submit:disabled { animation: none; }
-.ask-card .btn.submit::after {
-  content: ""; position: absolute; top: 0; left: -60%; width: 40%; height: 100%;
-  background: linear-gradient(100deg, transparent, rgba(255,255,255,.4), transparent);
-  transform: skewX(-20deg); pointer-events: none;
-}
-.ask-card .btn.submit:hover::after { animation: shine .8s ease; }
-@keyframes shine { to { left: 130%; } }
-.ask-card .btn.submit.loading::before { display: none; }          /* ganti spinner dengan pesawat */
-.plane { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; transition: transform .3s; }
-.btn.submit:hover .plane { transform: translate(3px, -3px); }
-.btn.submit.loading .plane { animation: fly .9s ease-in infinite; }
-@keyframes fly {
-  0%   { transform: translate(0, 0); opacity: 1; }
-  45%  { transform: translate(22px, -18px); opacity: 0; }
-  46%  { transform: translate(-22px, 18px); opacity: 0; }
-  100% { transform: translate(0, 0); opacity: 1; }
-}
-
-/* Tampilan sukses: lingkaran tergambar, centang tergambar, percikan war
+.field label { display: block; font-weight: 700;
