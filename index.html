@@ -5,17 +5,17 @@
   <!-- Agar tampilan menyesuaikan layar HP -->
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Kenali Axolotl: Si Naga Air yang Menggemaskan</title>
+  <meta name="description" content="Kenalan dengan axolotl, hewan air berwajah tersenyum yang bisa menumbuhkan kembali anggota tubuhnya. Penjelasan singkat, seru, dan mudah dipahami.">
 
-  <!-- Font: DM Serif Display (judul, elegan) + DM Sans (isi, mudah dibaca semua usia).
-       Ada font cadangan jika Google Fonts gagal dimuat. -->
+  <!-- Font: DM Serif Display (judul) + DM Sans (isi). Ada font cadangan jika Google Fonts gagal dimuat. -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=DM+Serif+Display&display=swap" rel="stylesheet">
 
-  <!-- CSS eksternal -->
-  <link rel="stylesheet" href="style.css">
+  <!-- CSS eksternal (satu file untuk semua halaman) -->
+  <link rel="stylesheet" href="style.css?v=4">
 
   <!-- JavaScript eksternal: dimuat di head agar tema terpasang lebih dulu (anti-kedip) -->
-  <script src="script.js"></script>
+  <script src="script.js?v=4"></script>
 </head>
 
 <body>
@@ -26,7 +26,7 @@
   <!-- ===== NAVIGASI ===== -->
   <header class="nav">
     <div class="wrap">
-      <a class="logo" href="#atas">Dunia Axolotl</a>
+      <a class="logo" href="index.html">Dunia Axolotl</a>
       <div class="nav-right">
         <!-- Tombol gelap/terang -->
         <button class="theme-toggle" id="themeToggle" type="button" aria-label="Ganti ke mode gelap" aria-pressed="false">
@@ -44,7 +44,7 @@
   <!-- Latar gelap di belakang menu (klik untuk menutup) -->
   <div class="menu-overlay" id="menuOverlay" aria-hidden="true"></div>
 
-  <!-- Menu samping: muncul dari kanan saat tombol tiga garis ditekan -->
+  <!-- Menu samping: setiap pilihan membuka halaman sendiri -->
   <nav class="drawer" id="menu" aria-label="Menu utama">
     <div class="drawer-head">
       <span class="drawer-title">Menu</span>
@@ -53,17 +53,17 @@
       </button>
     </div>
     <ul>
-      <li style="--i:0"><a href="#tentang">Tentang</a></li>
-      <li style="--i:1"><a href="#fakta">Fakta Unik</a></li>
-      <li style="--i:2"><a href="#perawatan">Perawatan</a></li>
-      <li style="--i:3"><a href="#galeri">Galeri</a></li>
-      <li style="--i:4"><a href="#tanya">Tanya</a></li>
-      <li style="--i:5"><a class="menu-login" href="login.html">Masuk</a></li>
+      <li style="--i:0"><a href="index.html" class="active" aria-current="page">Beranda</a></li>
+      <li style="--i:1"><a href="tentang.html">Tentang</a></li>
+      <li style="--i:2"><a href="fakta.html">Fakta Unik</a></li>
+      <li style="--i:3"><a href="perawatan.html">Perawatan</a></li>
+      <li style="--i:4"><a href="galeri.html">Galeri</a></li>
+      <li style="--i:5"><a href="tanya.html">Tanya</a></li>
+      <li style="--i:6"><a class="menu-login" href="login.html">Masuk</a></li>
     </ul>
   </nav>
 
   <main id="atas">
-
     <!-- ===== HERO ===== -->
     <section class="hero">
       <!-- Gelembung air dekoratif (animasi CSS) -->
@@ -76,8 +76,8 @@
       <div class="wrap">
         <div>
           <h1>Kenali Axolotl: Si Naga Air yang Menggemaskan!</h1>
-          <p>Berkenalan dengan hewan air berwajah tersenyum yang mampu menumbuhkan kembali anggota tubuhnya. Penjelasannya singkat dan mudah dipahami, cocok untuk siapa saja yang baru mengenalnya.</p>
-          <a class="btn" href="#tentang">Mulai Kenalan</a>
+          <p>Kenalan dengan hewan air berwajah tersenyum yang bisa menumbuhkan kembali anggota tubuhnya. Penjelasannya singkat, seru, dan mudah dipahami, cocok untuk siapa saja yang baru mengenalnya.</p>
+          <a class="btn" href="tentang.html">Mulai Kenalan</a>
         </div>
 
         <!-- Ilustrasi SVG (tidak perlu file gambar). Insang (.gill) dan mata (.eye) dianimasikan lewat CSS. -->
@@ -100,168 +100,40 @@
       </div>
     </section>
 
-    <!-- ===== TENTANG AXOLOTL ===== -->
-    <section class="about" id="tentang">
+    <!-- ===== ANGKA-ANGKA UNIK ===== -->
+    <section class="stats" aria-label="Angka-angka tentang axolotl">
       <div class="wrap">
-        <div>
-          <h2>Apa itu Axolotl?</h2>
-          <p>Axolotl (dibaca "aks-o-lotl") adalah sejenis salamander, yaitu hewan amfibi, yang seumur hidupnya tinggal di dalam air. Warnanya bisa pink, putih, abu-abu, atau cokelat, dengan tiga pasang insang berbulu di sisi kepala. Namanya berasal dari bahasa Nahuatl, bahasa suku Aztek, dan kira-kira berarti "anjing air".</p>
+        <div class="stat"><b data-count="3">3</b><span>pasang insang berbulu di kiri-kanan kepalanya</span></div>
+        <div class="stat"><b data-count="15">15</b><span>tahun, umur panjang yang bisa dicapai di akuarium</span></div>
+        <div class="stat"><b data-count="32">32</b><span>miliar pasang basa DNA, sekitar 10× milik manusia</span></div>
+        <div class="stat"><b data-count="1">1</b><span>tempat asli di alam liar: kanal Xochimilco, Meksiko</span></div>
+      </div>
+    </section>
+
+    <!-- ===== MAU MULAI DARI MANA? ===== -->
+    <section class="explore">
+      <div class="wrap">
+        <div class="sec-head">
+          <h2>Mau mulai dari mana?</h2>
+          <p class="lead">Pilih petualanganmu. Semuanya ringan, kok. Tidak ada ujian (kecuali kuis seru di Fakta Unik).</p>
         </div>
-        <div class="info-list">
-          <div class="info">
-            <h3>Asal</h3>
-            <p>Danau Xochimilco dan sekitarnya, dekat Kota Meksiko, Meksiko. Hanya di sanalah axolotl hidup di alam liar.</p>
-          </div>
-          <div class="info">
-            <h3>Status konservasi</h3>
-            <p>Sangat Terancam Punah (Critically Endangered) menurut IUCN. Polusi, hilangnya habitat, dan ikan pendatang membuat jumlahnya di alam liar sangat sedikit.</p>
-          </div>
+        <div class="explore-grid">
+          <a class="explore-card" href="tentang.html"><span class="ec-emoji" aria-hidden="true">🌊</span><h3>Tentang</h3><p>Siapa sih si naga air ini, dari mana asalnya, dan kenapa ia bisa “awet muda”?</p><span class="go">Buka →</span></a>
+          <a class="explore-card" href="fakta.html"><span class="ec-emoji" aria-hidden="true">✨</span><h3>Fakta Unik</h3><p>Dari kaki yang tumbuh lagi sampai DNA raksasa. Plus kuis Mitos atau Fakta!</p><span class="go">Buka →</span></a>
+          <a class="explore-card" href="perawatan.html"><span class="ec-emoji" aria-hidden="true">🫧</span><h3>Perawatan</h3><p>Suhu, makanan, akuarium, sampai trik menjaga air tetap dingin di cuaca tropis.</p><span class="go">Buka →</span></a>
+          <a class="explore-card" href="galeri.html"><span class="ec-emoji" aria-hidden="true">📸</span><h3>Galeri</h3><p>Enam potret yang dijamin bikin kamu senyum-senyum sendiri.</p><span class="go">Buka →</span></a>
+          <a class="explore-card" href="tanya.html"><span class="ec-emoji" aria-hidden="true">💬</span><h3>Tanya</h3><p>Masih penasaran atau ada yang kurang jelas? Tulis pertanyaanmu di sini.</p><span class="go">Buka →</span></a>
         </div>
       </div>
     </section>
 
-    <!-- ===== FAKTA UNIK ===== -->
-    <section class="facts" id="fakta">
+    <!-- ===== FAKTA ACAK ===== -->
+    <section class="alt">
       <div class="wrap">
-        <h2>Fakta Unik</h2>
-        <p class="lead">Empat hal yang membuat axolotl berbeda dari hewan lain.</p>
-        <div class="grid">
-          <!-- Untuk menambah fakta, salin satu blok <article class="card"> -->
-          <article class="card">
-            <h3>Jago regenerasi</h3>
-            <p>Kaki, ekor, insang, bahkan sebagian jantung dan sumsum tulang belakang bisa tumbuh lagi, biasanya tanpa bekas luka.</p>
-          </article>
-          <article class="card">
-            <h3>Selalu tersenyum</h3>
-            <p>Mulutnya melengkung ke atas secara alami, sehingga wajahnya tampak tersenyum terus. Itu bentuk anatomi, bukan tanda sedang senang.</p>
-          </article>
-          <article class="card">
-            <h3>Tak pernah dewasa</h3>
-            <p>Kebanyakan salamander berubah bentuk dan pindah ke darat saat dewasa. Axolotl tetap berwujud "anak" dan tinggal di air seumur hidup. Istilahnya neoteni.</p>
-          </article>
-          <article class="card">
-            <h3>Banyak warna</h3>
-            <p>Selain pink (albino) dan putih (leucistic), ada yang cokelat gelap, abu-abu, hingga hitam. Warna di alam liar cenderung gelap.</p>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <!-- ===== TIPS PERAWATAN ===== -->
-    <section class="care" id="perawatan">
-      <div class="wrap">
-        <div class="head">
-          <h2>Tips Perawatan Singkat</h2>
-          <p class="lead">Dua hal paling penting bagi pemula yang ingin memelihara.</p>
-        </div>
-        <div class="care-box">
-          <h3>Air yang dingin</h3>
-          <ul>
-            <li>Suhu ideal sekitar 14–18 °C.</li>
-            <li>Di atas 24 °C axolotl mudah stres dan sakit.</li>
-            <li>Air harus bersih dan bebas kaporit. Pakai penyaring dengan arus lemah.</li>
-          </ul>
-        </div>
-        <div class="care-box">
-          <h3>Makanan</h3>
-          <ul>
-            <li>Cacing darah (bloodworm) dan cacing tanah yang dipotong.</li>
-            <li>Pelet khusus axolotl atau ikan karnivora.</li>
-            <li>Beri secukupnya, lalu angkat sisa makanan agar air tidak kotor.</li>
-          </ul>
-        </div>
-        <p class="note">Kulit axolotl sangat halus, jadi sebaiknya tidak dipegang tanpa alasan penting. Cek juga aturan kepemilikan di daerahmu sebelum membeli.</p>
-      </div>
-    </section>
-
-    <!-- ===== GALERI (placeholder) ===== -->
-    <section class="gallery" id="galeri">
-      <div class="wrap">
-        <h2>Galeri</h2>
-        <p class="lead">Tempat untuk foto-foto axolotl pilihanmu.</p>
-        <div class="gallery-grid">
-          <!-- Foto ada di folder gambar/. Untuk mengganti: ubah nama file di src dan deskripsi di alt. -->
-          <div class="ph"><img src="gambar/foto1.jpg" alt="Axolotl putih dengan insang merah muda berenang menghadap kamera di dekat batu" loading="lazy"></div>
-          <div class="ph"><img src="gambar/foto2.jpg" alt="Axolotl merah muda cerah berenang di akuarium gelap dengan batu dan tanaman" loading="lazy"></div>
-          <div class="ph"><img src="gambar/foto3.jpg" alt="Axolotl abu-abu di atas kerikil, dengan axolotl putih di belakangnya" loading="lazy"></div>
-          <div class="ph"><img src="gambar/foto4.jpg" alt="Axolotl cokelat gelap merayap di atas lumut" loading="lazy"></div>
-          <div class="ph"><img src="gambar/foto5.jpg" alt="Axolotl putih kecil berjalan di dasar akuarium di antara tanaman hijau" loading="lazy"></div>
-          <div class="ph"><img src="gambar/foto6.jpg" alt="Axolotl cokelat menghadap kamera dengan pantulannya di kaca" loading="lazy"></div>
-        </div>
-      </div>
-    </section>
-    <!-- ===== TANYA ===== -->
-    <section class="contact" id="tanya">
-      <!-- Gelembung air dekoratif -->
-      <span class="bubble" aria-hidden="true" style="--s:16px;--l:6%;--t:10s;--dl:0s"></span>
-      <span class="bubble" aria-hidden="true" style="--s:26px;--l:28%;--t:13s;--dl:3s"></span>
-      <span class="bubble" aria-hidden="true" style="--s:14px;--l:55%;--t:9s;--dl:5s"></span>
-      <span class="bubble" aria-hidden="true" style="--s:22px;--l:78%;--t:12s;--dl:1s"></span>
-      <span class="bubble" aria-hidden="true" style="--s:12px;--l:94%;--t:8s;--dl:4s"></span>
-
-      <div class="wrap">
-        <div class="head">
-          <h2>Apakah Anda ingin bertanya tentang axolotl? <span class="emoji" aria-hidden="true">🦎💬</span></h2>
-          <p class="lead">Silakan isi di bawah ini ya! <span class="emoji bounce" aria-hidden="true">👇</span><span class="emoji sparkle" aria-hidden="true">✨</span></p>
-        </div>
-
-        <div class="ask-card" id="askCard">
-
-
-          <!-- Formulir -->
-          <div class="ask-body" id="askBody">
-            <form id="askForm" novalidate>
-
-              <div class="field">
-                <label for="askNama">Nama</label>
-                <input type="text" id="askNama" name="nama" placeholder="Nama panggilanmu" autocomplete="name" maxlength="60" required aria-describedby="askNama-error">
-                <p class="error" id="askNama-error"></p>
-              </div>
-
-              <div class="field">
-                <label for="askEmail">Email</label>
-                <input type="email" id="askEmail" name="email" placeholder="nama@email.com" autocomplete="email" required aria-describedby="askEmail-error">
-                <p class="error" id="askEmail-error"></p>
-              </div>
-
-              <div class="field">
-                <label for="askPesan">Pertanyaanmu</label>
-                <textarea id="askPesan" name="pesan" rows="5" maxlength="500" placeholder="Tulis sejelas mungkin, ya…" required aria-describedby="askPesan-error"></textarea>
-                <p class="counter" id="askCounter"><span id="askHitung">0</span>/500</p>
-                <p class="error" id="askPesan-error"></p>
-              </div>
-
-
-              <button type="submit" class="btn submit" id="askBtn">
-                <svg class="plane" viewBox="0 0 24 24" aria-hidden="true"><path d="M22 2 11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
-                <span class="label">Kirim</span>
-              </button>
-              <p class="form-status" id="askStatus" role="status" aria-live="polite"></p>
-            </form>
-          </div>
-
-          <!-- Tampilan setelah berhasil terkirim -->
-          <div class="ask-done" id="askDone" hidden tabindex="-1">
-            <div class="done-art" aria-hidden="true">
-              <svg viewBox="0 0 120 120"><circle class="done-ring" cx="60" cy="60" r="44"/><path class="done-check" d="M40 62l15 15 27-32"/></svg>
-              <span class="spark" style="--x:0px;--y:-62px"></span>
-              <span class="spark" style="--x:44px;--y:-44px"></span>
-              <span class="spark" style="--x:62px;--y:0px"></span>
-              <span class="spark" style="--x:44px;--y:44px"></span>
-              <span class="spark" style="--x:0px;--y:62px"></span>
-              <span class="spark" style="--x:-44px;--y:44px"></span>
-              <span class="spark" style="--x:-62px;--y:0px"></span>
-              <span class="spark" style="--x:-44px;--y:-44px"></span>
-              <span class="spark" style="--x:24px;--y:-70px"></span>
-              <span class="spark" style="--x:-24px;--y:-70px"></span>
-              <span class="spark" style="--x:24px;--y:70px"></span>
-              <span class="spark" style="--x:-24px;--y:70px"></span>
-            </div>
-            <h3>Terima kasih, <span id="askDoneNama"></span>!</h3>
-            <p id="askDoneTeks">Pesanmu sudah terkirim.</p>
-            <button type="button" class="btn" id="askLagi">Tulis pesan lain</button>
-          </div>
-
+        <div class="rf-card">
+          <p class="rf-label">🎲 Fakta acak</p>
+          <p class="rf-text" id="rfText" aria-live="polite">Penasaran? Tekan tombolnya untuk dapat satu fakta axolotl!</p>
+          <button class="btn" id="rfBtn" type="button">Kasih aku fakta!</button>
         </div>
       </div>
     </section>
@@ -271,7 +143,7 @@
   <!-- ===== FOOTER ===== -->
   <footer>
     <strong>Dunia Axolotl</strong>
-    <small>Pengenalan axolotl untuk pemula &copy; <span id="tahun"></span></small>
+    <small>Dibuat dengan 💙 untuk para pencinta axolotl &copy; <span id="tahun"></span></small>
   </footer>
 
   <!-- Tombol kembali ke atas (muncul setelah halaman di-scroll) -->
