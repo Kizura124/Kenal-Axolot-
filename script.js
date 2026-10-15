@@ -110,29 +110,13 @@
       ukurProgres();
     }
 
-    // ---------- 4. MENU AKTIF MENGIKUTI BAGIAN YANG DIBACA (halaman utama) ----------
-    var tautan = document.querySelectorAll('.drawer a[href^="#"]');
-    var bagian = document.querySelectorAll('section[id]');
-    if ('IntersectionObserver' in window && tautan.length) {
-      var spy = new IntersectionObserver(function (daftar) {
-        daftar.forEach(function (d) {
-          if (!d.isIntersecting) return;
-          tautan.forEach(function (a) {
-            var aktif = a.getAttribute('href') === '#' + d.target.id;
-            a.classList.toggle('active', aktif);
-            if (aktif) a.setAttribute('aria-current', 'true'); else a.removeAttribute('aria-current');
-          });
-        });
-      }, { rootMargin: '-45% 0px -50% 0px' });
-      bagian.forEach(function (s) { spy.observe(s); });
-    }
-
-    // ---------- 5. ELEMEN MUNCUL SAAT DI-SCROLL (halaman utama) ----------
+    // ---------- 4. ELEMEN MUNCUL SAAT DI-SCROLL ----------
+    // (menu yang aktif sudah ditandai langsung di HTML setiap halaman)
     if ('IntersectionObserver' in window && !kurangiGerak) {
       var target = document.querySelectorAll(
-        '.about .wrap > *, .info, .facts .wrap > h2, .facts .wrap > .lead, .card, ' +
-        '.care .head, .care-box, .note, .gallery .wrap > h2, .gallery .wrap > .lead, .ph, ' +
-        '.contact .head, .ask-card, #askBody .field, #askBody .btn.submit'
+        '.about .wrap > *, .info, .card, .care-box, .note, .callout, .explore-card, .stat, ' +
+        '.morph, .step, .profile > div, .flow-row, .param, .q, .photo, .rf-card, .thermo, ' +
+        '.checklist li, .pager, .quiz-end, .contact .head, .ask-card, #askBody .field, #askBody .btn.submit'
       );
       var muncul = new IntersectionObserver(function (daftar) {
         daftar.forEach(function (d) {
@@ -143,11 +127,11 @@
           // Setelah selesai, lepas kelas supaya efek hover tidak ikut tertunda
           setTimeout(function () { el.classList.remove('reveal', 'in'); }, 1400);
         });
-      }, { threshold: 0.15 });
+      }, { threshold: 0.12 });
 
       target.forEach(function (el) {
         var urutan = Array.prototype.indexOf.call(el.parentNode.children, el);
-        el.style.setProperty('--d', (urutan % 6) * 0.1 + 's');
+        el.style.setProperty('--d', (urutan % 6) * 0.09 + 's');
         el.classList.add('reveal');
         muncul.observe(el);
       });
@@ -172,6 +156,213 @@
       atur();
       keAtas.addEventListener('click', function () {
         window.scrollTo({ top: 0, behavior: kurangiGerak ? 'auto' : 'smooth' });
+      });
+    }
+
+    // ---------- 5d. ANGKA BERHITUNG NAIK (beranda) ----------
+    var angka = document.querySelectorAll('[data-count]');
+    if (angka.length) {
+      var naikkan = function (el) {
+        var akhir = parseFloat(el.getAttribute('data-count')), mulai = null, durasi = 1500;
+        var langkah = function (t) {
+          if (mulai === null) mulai = t;
+          var p = Math.min((t - mulai) / durasi, 1);
+          el.textContent = Math.round(akhir * (1 - Math.pow(1 - p, 3)));
+          if (p < 1) requestAnimationFrame(langkah);
+        };
+        requestAnimationFrame(langkah);
+      };
+      if ('IntersectionObserver' in window && !kurangiGerak) {
+        var hitungIO = new IntersectionObserver(function (daftar) {
+          daftar.forEach(function (d) {
+            if (d.isIntersecting) { naikkan(d.target); hitungIO.unobserve(d.target); }
+          });
+        }, { threshold: 0.6 });
+        angka.forEach(function (a) { a.textContent = '0'; hitungIO.observe(a); });
+      }
+    }
+
+    // ---------- 5e. FAKTA ACAK (beranda) ----------
+    var rfBtn = document.getElementById('rfBtn');
+    if (rfBtn) {
+      var rfTeks = document.getElementById('rfText');
+      var daftarFakta = [
+        'Axolotl bisa menumbuhkan lagi kaki yang hilang, lengkap dengan tulang dan jarinya!',
+        'Mulutnya yang melengkung itu bawaan lahir. Axolotl tidak sedang tersenyum padamu (tapi tetap menggemaskan).',
+        'Axolotl tidak punya kelopak mata, jadi ia tidak bisa berkedip.',
+        'DNA axolotl sekitar 10 kali lebih besar daripada DNA manusia.',
+        'Axolotl bukan ikan. Ia amfibi, sepupu jauh katak.',
+        'Di alam liar, axolotl hanya hidup di kanal-kanal Xochimilco, Meksiko.',
+        'Axolotl makan dengan cara menyedot: mulutnya dibuka cepat, dan mangsa ikut tersedot masuk.',
+        'Insang berbulu di kepalanya ada tiga pasang, kiri dan kanan.',
+        'Wajah axolotl menghiasi uang kertas 50 peso Meksiko.',
+        'Suhu favorit axolotl hanya 16–18 °C, jauh lebih sejuk daripada akuarium ikan hias biasa.',
+        'Axolotl bisa hidup 10–15 tahun di akuarium, jadi memeliharanya itu komitmen jangka panjang.'
+      ];
+      var terakhir = -1;
+      rfBtn.addEventListener('click', function () {
+        var i;
+        do { i = Math.floor(Math.random() * daftarFakta.length); } while (i === terakhir);
+        terakhir = i;
+        rfTeks.textContent = daftarFakta[i];
+        rfTeks.classList.remove('pop'); void rfTeks.offsetWidth; rfTeks.classList.add('pop');
+        rfBtn.textContent = 'Fakta lainnya! 🎲';
+      });
+    }
+
+    // ---------- 5f. KUIS MITOS ATAU FAKTA ----------
+    var soal = document.querySelectorAll('.quiz .q');
+    if (soal.length) {
+      var skor = 0, terjawab = 0;
+      var akhirKuis = document.getElementById('quizEnd');
+      var teksSkor  = document.getElementById('quizScore');
+      var ulangKuis = document.getElementById('quizReset');
+      var pesanSkor = function (s, n) {
+        if (s === n) return 'Sempurna! Kamu calon pakar axolotl 🏆';
+        if (s >= n - 2) return 'Keren! Tinggal sedikit lagi jadi pakar 🎉';
+        if (s >= 2) return 'Lumayan! Baca halaman Tentang dulu, yuk 📖';
+        return 'Tenang, semua pakar dulunya pemula 😄 Coba lagi, yuk!';
+      };
+      soal.forEach(function (q) {
+        q.querySelectorAll('.opt').forEach(function (btn) {
+          btn.addEventListener('click', function () {
+            if (q.classList.contains('done')) return;
+            var kunci = q.getAttribute('data-jawab');
+            var benar = btn.getAttribute('data-pilih') === kunci;
+            q.classList.add('done');
+            btn.classList.add(benar ? 'benar' : 'salah');
+            if (!benar) q.querySelector('.opt[data-pilih="' + kunci + '"]').classList.add('benar');
+            var ex = q.querySelector('.expl');
+            ex.querySelector('.hasil').textContent = benar ? 'Benar! 🎉 ' : 'Hampir! 😅 ';
+            ex.hidden = false;
+            if (benar) skor++;
+            terjawab++;
+            if (terjawab === soal.length) {
+              teksSkor.textContent = 'Skormu: ' + skor + ' dari ' + soal.length + '. ' + pesanSkor(skor, soal.length);
+              akhirKuis.hidden = false;
+            }
+          });
+        });
+      });
+      ulangKuis.addEventListener('click', function () {
+        skor = 0; terjawab = 0;
+        soal.forEach(function (q) {
+          q.classList.remove('done');
+          q.querySelectorAll('.opt').forEach(function (b) { b.classList.remove('benar', 'salah'); });
+          q.querySelector('.expl').hidden = true;
+        });
+        akhirKuis.hidden = true;
+        soal[0].scrollIntoView({ behavior: kurangiGerak ? 'auto' : 'smooth', block: 'center' });
+      });
+    }
+
+    // ---------- 5g. CEK SUHU AIR (perawatan) ----------
+    var penggeser = document.getElementById('suhu');
+    if (penggeser) {
+      var bacaan = document.getElementById('suhuBaca');
+      var emoji  = document.getElementById('suhuEmoji');
+      var pesan  = document.getElementById('suhuPesan');
+      var sub    = document.getElementById('suhuSub');
+      var pin    = document.getElementById('suhuPin');
+      var kondisi = function (t) {
+        if (t < 14)  return ['🥶', 'Dingin banget', 'Masih bisa bertahan, tapi nafsu makannya turun dan geraknya melambat.'];
+        if (t < 16)  return ['🙂', 'Sejuk, masih aman', 'Sedikit di bawah ideal, tapi axolotl umumnya baik-baik saja.'];
+        if (t <= 18) return ['😍', 'Pas banget!', 'Inilah zona nyaman axolotl. Pertahankan!'];
+        if (t <= 20) return ['😐', 'Agak hangat', 'Masih bisa, tapi pantau terus dan cari cara menurunkannya.'];
+        if (t < 22)  return ['😓', 'Mulai gerah', 'Segera dinginkan sebelum ia stres.'];
+        if (t < 24)  return ['🥵', 'Stres!', 'Risiko sakit meningkat. Turunkan suhu secepatnya, tapi pelan-pelan.'];
+        return ['🚨', 'Bahaya!', 'Di atas 24 °C axolotl mudah sakit. Turunkan maksimal sekitar 2 °C per jam, jangan mendadak.'];
+      };
+      var perbaruiSuhu = function () {
+        var t = parseFloat(penggeser.value);
+        var s = kondisi(t);
+        bacaan.textContent = t.toFixed(1).replace('.', ',') + ' °C';
+        if (emoji.textContent !== s[0]) {
+          emoji.textContent = s[0];
+          emoji.classList.remove('bump'); void emoji.offsetWidth; emoji.classList.add('bump');
+        }
+        pesan.textContent = s[1];
+        sub.textContent = s[2];
+        pin.style.setProperty('--p', ((t - 10) / 20 * 100) + '%');
+        penggeser.setAttribute('aria-valuetext', t.toFixed(1) + ' derajat Celsius, ' + s[1]);
+      };
+      penggeser.addEventListener('input', perbaruiSuhu);
+      perbaruiSuhu();
+    }
+
+    // ---------- 5h. CHECKLIST BELANJA (perawatan) ----------
+    var kotakCek = document.querySelectorAll('.checklist input');
+    if (kotakCek.length) {
+      var barCek = document.getElementById('clBar');
+      var tekCek = document.getElementById('clText');
+      var tersimpan = [];
+      try { tersimpan = JSON.parse(localStorage.getItem('cekBelanja') || '[]'); } catch (e) {}
+      var perbaruiCek = function () {
+        var n = 0, pilih = [];
+        kotakCek.forEach(function (c, i) { if (c.checked) { n++; pilih.push(i); } });
+        barCek.style.width = (n / kotakCek.length * 100) + '%';
+        tekCek.textContent = n === kotakCek.length
+          ? 'Semua siap! Waktunya menjemput si naga air 🎉'
+          : n + ' dari ' + kotakCek.length + ' perlengkapan siap';
+        try { localStorage.setItem('cekBelanja', JSON.stringify(pilih)); } catch (e) {}
+      };
+      kotakCek.forEach(function (c, i) {
+        if (tersimpan.indexOf(i) > -1) c.checked = true;
+        c.addEventListener('change', perbaruiCek);
+      });
+      perbaruiCek();
+    }
+
+    // ---------- 5i. LIGHTBOX GALERI ----------
+    var fotoBuka = document.querySelectorAll('.photo-open');
+    var kotakFoto = document.getElementById('lightbox');
+    if (fotoBuka.length && kotakFoto) {
+      var lbImg = document.getElementById('lbImg');
+      var lbCap = document.getElementById('lbCap');
+      var lbTutup = document.getElementById('lbClose');
+      var lbPrev = document.getElementById('lbPrev');
+      var lbNext = document.getElementById('lbNext');
+      var indeks = 0, pemicu = null;
+
+      var tampilFoto = function (i) {
+        indeks = (i + fotoBuka.length) % fotoBuka.length;
+        var tautanFoto = fotoBuka[indeks];
+        lbImg.src = tautanFoto.getAttribute('href');
+        lbImg.alt = tautanFoto.querySelector('img').alt;
+        lbCap.textContent = tautanFoto.getAttribute('data-cap') || '';
+      };
+      var bukaFoto = function (i) {
+        pemicu = fotoBuka[i];
+        tampilFoto(i);
+        kotakFoto.classList.add('open');
+        kotakFoto.setAttribute('aria-hidden', 'false');
+        root.classList.add('kunci');               // kunci scroll halaman di belakang
+        setTimeout(function () { lbTutup.focus(); }, 60);
+      };
+      var tutupFoto = function () {
+        kotakFoto.classList.remove('open');
+        kotakFoto.setAttribute('aria-hidden', 'true');
+        root.classList.remove('kunci');
+        if (pemicu) pemicu.focus();
+      };
+      fotoBuka.forEach(function (a, i) {
+        a.addEventListener('click', function (e) { e.preventDefault(); bukaFoto(i); });
+      });
+      lbTutup.addEventListener('click', tutupFoto);
+      lbPrev.addEventListener('click', function () { tampilFoto(indeks - 1); });
+      lbNext.addEventListener('click', function () { tampilFoto(indeks + 1); });
+      kotakFoto.addEventListener('click', function (e) { if (e.target === kotakFoto) tutupFoto(); });
+      document.addEventListener('keydown', function (e) {
+        if (!kotakFoto.classList.contains('open')) return;
+        if (e.key === 'Escape') tutupFoto();
+        else if (e.key === 'ArrowLeft') tampilFoto(indeks - 1);
+        else if (e.key === 'ArrowRight') tampilFoto(indeks + 1);
+        else if (e.key === 'Tab') {
+          var f = [lbTutup, lbPrev, lbNext];
+          var pos = f.indexOf(document.activeElement);
+          e.preventDefault();
+          f[(pos + (e.shiftKey ? f.length - 1 : 1)) % f.length].focus();
+        }
       });
     }
 
@@ -418,4 +609,3 @@
     });
   });
 })();
-          
