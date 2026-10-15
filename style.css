@@ -386,4 +386,150 @@ h2.tampak::after { width: 64px; }
 
 /* ===== 4. KOLOM ISIAN ===== */
 .field { margin-bottom: 1.1rem; }
-.field label { display: block; font-weight: 700;
+.field label { display: block; font-weight: 700; font-size: 1rem; margin-bottom: .35rem; }
+.input-wrap { position: relative; }
+.field input[type="email"], .field input[type="password"], .field input[type="text"], .field textarea {
+  width: 100%; font: inherit; font-size: 1.05rem; color: var(--ink);
+  background: var(--bg); border: 1.5px solid var(--line); border-radius: 12px;
+  padding: .8rem 1rem; transition: border-color .2s, box-shadow .2s;
+}
+.field input::placeholder, .field textarea::placeholder { color: var(--muted); opacity: .7; }
+.field input:hover, .field textarea:hover { border-color: var(--teal); }
+.field input:focus, .field textarea:focus { outline: none; border-color: var(--teal); box-shadow: 0 0 0 4px var(--ring); animation: focusPulse .5s ease; }
+.field input[aria-invalid="true"], .field textarea[aria-invalid="true"] { border-color: var(--danger); animation: shakeX .4s ease; }
+.field input[aria-invalid="true"]:focus, .field textarea[aria-invalid="true"]:focus { box-shadow: 0 0 0 4px rgba(179,38,30,.15); }
+.input-wrap input { padding-right: 3.2rem; }
+
+.error { color: var(--danger); font-size: .95rem; margin-top: .35rem; max-width: none; min-height: 0; animation: rise .3s ease both; }
+.error:empty { display: none; }
+
+/* Tombol lihat/sembunyikan sandi */
+.pw-toggle {
+  position: absolute; top: 50%; right: .4rem; transform: translateY(-50%);
+  width: 40px; height: 40px; border: none; border-radius: 10px; background: none;
+  color: var(--muted); cursor: pointer; display: grid; place-items: center;
+  transition: color .2s, background .2s;
+}
+.pw-toggle:hover { color: var(--heading); background: var(--ring); }
+.pw-toggle svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.pw-toggle .icon-hide { display: none; }
+.pw-toggle[aria-pressed="true"] .icon-show { display: none; }
+.pw-toggle[aria-pressed="true"] .icon-hide { display: block; }
+
+/* ===== 5. BARIS INGAT SAYA / LUPA SANDI ===== */
+.row { display: flex; justify-content: space-between; align-items: center; gap: .6rem 1rem; flex-wrap: wrap; margin: .2rem 0 1.4rem; font-size: 1rem; }
+.check { display: inline-flex; align-items: center; gap: .55rem; cursor: pointer; }
+.check input { width: 20px; height: 20px; accent-color: var(--btn-bg); cursor: pointer; }
+.link { color: var(--heading); font-weight: 500; text-underline-offset: 4px; }
+.link:hover { color: var(--pink-deep); }
+
+/* ===== 6. TOMBOL MASUK / KIRIM ===== */
+.btn.submit { width: 100%; border: none; cursor: pointer; text-align: center; display: flex; align-items: center; justify-content: center; gap: .6rem; }
+.btn.submit:disabled { cursor: progress; opacity: .85; transform: none; box-shadow: none; }
+.btn.submit.loading::before {
+  content: ""; width: 18px; height: 18px; border-radius: 50%;
+  border: 3px solid currentColor; border-right-color: transparent;
+  animation: spin .7s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Pesan status di bawah tombol */
+.form-status { margin: 1rem 0 0; font-size: 1rem; text-align: center; max-width: none; min-height: 1.7em; }
+.form-status.ok  { color: var(--success); font-weight: 700; }
+.form-status.err { color: var(--danger); font-weight: 700; }
+
+.signup { text-align: center; margin: 1.4rem auto 0; font-size: 1rem; color: var(--muted); max-width: none; }
+
+/* ==========================================================
+   TANYA (index.html, #tanya)
+   ========================================================== */
+[hidden] { display: none !important; }
+
+.contact { position: relative; overflow: hidden; }
+.contact .wrap { position: relative; z-index: 1; }
+.contact .head { text-align: center; margin-bottom: 2rem; }
+.contact .head .lead { margin-inline: auto; }
+
+.ask-card {
+  width: min(640px, 100%); margin-inline: auto;
+  background: var(--surface); border: 1px solid var(--line); border-radius: 22px;
+  padding: 1.8rem 1.4rem; box-shadow: var(--shadow);
+}
+@media (min-width: 520px) { .ask-card { padding: 2.4rem 2.4rem; } }
+.ask-card.shake { animation: shake .45s ease; }
+.ask-body.balik { animation: rise .5s ease both; }
+
+/* Kolom isian: label ikut berwarna saat kolomnya diklik */
+.field label { transition: color .2s; }
+.field:focus-within label { color: var(--heading); }
+
+/* Kolom pertanyaan: tinggi 5 baris, bisa ditarik ke bawah */
+.field textarea { display: block; resize: vertical; min-height: 130px; line-height: 1.5; }
+.counter { text-align: right; font-size: .9rem; color: var(--muted); margin: .25rem 0 0; max-width: none; transition: color .2s; }
+.counter.hampir { color: var(--danger); font-weight: 700; }
+
+/* Tombol kirim: kilatan cahaya saat disorot, pesawat kertas terbang saat mengirim */
+.ask-card .btn.submit { position: relative; overflow: hidden; }
+.ask-card .btn.submit::after {
+  content: ""; position: absolute; top: 0; left: -60%; width: 40%; height: 100%;
+  background: linear-gradient(100deg, transparent, rgba(255,255,255,.4), transparent);
+  transform: skewX(-20deg); pointer-events: none;
+}
+.ask-card .btn.submit:hover::after { animation: shine .8s ease; }
+@keyframes shine { to { left: 130%; } }
+.ask-card .btn.submit.loading::before { display: none; }          /* ganti spinner dengan pesawat */
+.plane { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; transition: transform .3s; }
+.btn.submit:hover .plane { transform: translate(3px, -3px); }
+.btn.submit.loading .plane { animation: fly .9s ease-in infinite; }
+@keyframes fly {
+  0%   { transform: translate(0, 0); opacity: 1; }
+  45%  { transform: translate(22px, -18px); opacity: 0; }
+  46%  { transform: translate(-22px, 18px); opacity: 0; }
+  100% { transform: translate(0, 0); opacity: 1; }
+}
+
+/* Tampilan sukses: lingkaran tergambar, centang tergambar, percikan warna */
+.ask-done { text-align: center; padding: 1rem 0; animation: popIn .6s cubic-bezier(.34,1.56,.64,1) both; }
+.ask-done:focus { outline: none; }
+.ask-done h3 { color: var(--heading); font-size: 1.8rem; }
+.ask-done p { margin: .4rem auto 1.6rem; color: var(--muted); }
+.done-art { position: relative; width: 120px; height: 120px; margin: 0 auto 1rem; }
+.done-art svg { width: 100%; height: 100%; }
+.done-ring { fill: var(--ring); stroke: var(--teal); stroke-width: 5; stroke-dasharray: 277; stroke-dashoffset: 277; transform-box: fill-box; transform-origin: center; transform: rotate(-90deg); animation: draw .6s ease forwards; }
+.done-check { fill: none; stroke: var(--heading); stroke-width: 7; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 70; stroke-dashoffset: 70; animation: draw .45s .5s ease forwards; }
+@keyframes draw { to { stroke-dashoffset: 0; } }
+.spark { position: absolute; left: 50%; top: 50%; width: 9px; height: 9px; margin: -4px 0 0 -4px; border-radius: 50%; background: var(--pink-deep); opacity: 0; animation: burst .8s .55s ease-out forwards; }
+.spark:nth-of-type(even) { background: var(--teal); }
+.spark:nth-of-type(3n) { background: #f5c542; }
+@keyframes burst {
+  0%   { transform: translate(0, 0) scale(1); opacity: 1; }
+  100% { transform: translate(var(--x), var(--y)) scale(.3); opacity: 0; }
+}
+
+/* Jika animasi dimatikan di perangkat: tetap tampilkan lingkaran & centang utuh */
+@media (prefers-reduced-motion: reduce) {
+  .done-ring, .done-check { stroke-dashoffset: 0 !important; }
+}
+
+/* Emoji di judul bagian pertanyaan */
+.emoji { display: inline-block; font-style: normal; }
+.emoji.bounce  { animation: bounceY 1.1s ease-in-out infinite; }
+.emoji.sparkle { animation: twinkle 1.8s ease-in-out infinite; }
+.contact h2 .emoji { animation: wiggle 2.8s ease-in-out infinite; transform-origin: 70% 80%; }
+@keyframes bounceY { 0%, 100% { transform: translateY(-3px); } 50% { transform: translateY(5px); } }
+@keyframes twinkle { 0%, 100% { transform: scale(1) rotate(0); opacity: 1; } 50% { transform: scale(1.3) rotate(15deg); opacity: .7; } }
+@keyframes wiggle  { 0%, 70%, 100% { transform: rotate(0); } 78% { transform: rotate(-10deg); } 86% { transform: rotate(10deg); } 94% { transform: rotate(-6deg); } }
+
+/* ----- Tambahan untuk kartu pertanyaan & login ----- */
+.ask-card { position: relative; }
+
+/* Kolom isian: denyut saat diklik, bergetar saat salah */
+@keyframes focusPulse { 0% { box-shadow: 0 0 0 0 var(--ring); } 50% { box-shadow: 0 0 0 9px var(--ring); } 100% { box-shadow: 0 0 0 4px var(--ring); } }
+/* Kartu pertanyaan memakai tampilan polos: tanpa denyut/getar pada kolom */
+.ask-card .field input, .ask-card .field textarea { animation: none !important; }
+@keyframes shakeX { 20%, 60% { transform: translateX(-5px); } 40%, 80% { transform: translateX(5px); } }
+
+/* Judul bagian pertanyaan & panel login tanpa garis hias */
+.contact .head h2::after { display: none; }
+.login-side h2::after { display: none; }
+   
