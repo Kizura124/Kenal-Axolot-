@@ -11,7 +11,7 @@
   //  2) EMAIL_TUJUAN  : email Anda, mis. 'nama@email.com' (membuka aplikasi email pengunjung)
   // Jika keduanya kosong, formulir hanya berjalan sebagai DEMO (pesan tidak dikirim ke mana pun).
   var FORM_ENDPOINT = '';
-  var EMAIL_TUJUAN  = 'baimzura03@gmail.com';
+  var EMAIL_TUJUAN  = '';
 
   // ---------- 0. PASANG TEMA SECEPATNYA (anti-kedip) ----------
   // Urutan: pilihan tersimpan > pengaturan sistem perangkat.
