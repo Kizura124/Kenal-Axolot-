@@ -40,10 +40,16 @@
     if (tombolTema) {
       tombolTema.addEventListener('click', function () {
         var baru = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-        root.classList.add('theme-anim');                    // aktifkan transisi warna
-        root.setAttribute('data-theme', baru);
-        try { localStorage.setItem('tema', baru); } catch (e) {}
-        perbaruiTombolTema();
+        var ganti = function () {
+          root.setAttribute('data-theme', baru);
+          try { localStorage.setItem('tema', baru); } catch (e) {}
+          perbaruiTombolTema();
+        };
+        // Cara utama: View Transitions (crossfade mulus satu layar, tanpa patah-patah)
+        if (document.startViewTransition && !kurangiGerak) { document.startViewTransition(ganti); return; }
+        // Cadangan untuk browser lama
+        root.classList.add('theme-anim');
+        ganti();
         setTimeout(function () { root.classList.remove('theme-anim'); }, 600);
       });
     }
@@ -206,7 +212,7 @@
         terakhir = i;
         rfTeks.textContent = daftarFakta[i];
         rfTeks.classList.remove('pop'); void rfTeks.offsetWidth; rfTeks.classList.add('pop');
-        rfBtn.textContent = 'Fakta lainnya! 🎲';
+        rfBtn.textContent = 'Fakta lainnya! 🐚';
       });
     }
 
@@ -218,10 +224,10 @@
       var teksSkor  = document.getElementById('quizScore');
       var ulangKuis = document.getElementById('quizReset');
       var pesanSkor = function (s, n) {
-        if (s === n) return 'Sempurna! Kamu calon pakar axolotl 🏆';
-        if (s >= n - 2) return 'Keren! Tinggal sedikit lagi jadi pakar 🎉';
-        if (s >= 2) return 'Lumayan! Baca halaman Tentang dulu, yuk 📖';
-        return 'Tenang, semua pakar dulunya pemula 😄 Coba lagi, yuk!';
+        if (s === n) return 'Sempurna! Kamu calon pakar axolotl 🐋';
+        if (s >= n - 2) return 'Keren! Tinggal sedikit lagi jadi pakar 🫧';
+        if (s >= 2) return 'Lumayan! Baca halaman Tentang dulu, yuk 🌱';
+        return 'Tenang, semua pakar dulunya pemula 🌊 Coba lagi, yuk!';
       };
       soal.forEach(function (q) {
         q.querySelectorAll('.opt').forEach(function (btn) {
@@ -233,7 +239,7 @@
             btn.classList.add(benar ? 'benar' : 'salah');
             if (!benar) q.querySelector('.opt[data-pilih="' + kunci + '"]').classList.add('benar');
             var ex = q.querySelector('.expl');
-            ex.querySelector('.hasil').textContent = benar ? 'Benar! 🎉 ' : 'Hampir! 😅 ';
+            ex.querySelector('.hasil').textContent = benar ? 'Benar! 🫧 ' : 'Hampir! 🌊 ';
             ex.hidden = false;
             if (benar) skor++;
             terjawab++;
@@ -265,12 +271,12 @@
       var sub    = document.getElementById('suhuSub');
       var pin    = document.getElementById('suhuPin');
       var kondisi = function (t) {
-        if (t < 14)  return ['🥶', 'Dingin banget', 'Masih bisa bertahan, tapi nafsu makannya turun dan geraknya melambat.'];
-        if (t < 16)  return ['🙂', 'Sejuk, masih aman', 'Sedikit di bawah ideal, tapi axolotl umumnya baik-baik saja.'];
-        if (t <= 18) return ['😍', 'Pas banget!', 'Inilah zona nyaman axolotl. Pertahankan!'];
-        if (t <= 20) return ['😐', 'Agak hangat', 'Masih bisa, tapi pantau terus dan cari cara menurunkannya.'];
-        if (t < 22)  return ['😓', 'Mulai gerah', 'Segera dinginkan sebelum ia stres.'];
-        if (t < 24)  return ['🥵', 'Stres!', 'Risiko sakit meningkat. Turunkan suhu secepatnya, tapi pelan-pelan.'];
+        if (t < 14)  return ['🧊', 'Dingin banget', 'Masih bisa bertahan, tapi nafsu makannya turun dan geraknya melambat.'];
+        if (t < 16)  return ['💧', 'Sejuk, masih aman', 'Sedikit di bawah ideal, tapi axolotl umumnya baik-baik saja.'];
+        if (t <= 18) return ['🌊', 'Pas banget!', 'Inilah zona nyaman axolotl. Pertahankan!'];
+        if (t <= 20) return ['🌤️', 'Agak hangat', 'Masih bisa, tapi pantau terus dan cari cara menurunkannya.'];
+        if (t < 22)  return ['☀️', 'Mulai gerah', 'Segera dinginkan sebelum ia stres.'];
+        if (t < 24)  return ['🔥', 'Stres!', 'Risiko sakit meningkat. Turunkan suhu secepatnya, tapi pelan-pelan.'];
         return ['🚨', 'Bahaya!', 'Di atas 24 °C axolotl mudah sakit. Turunkan maksimal sekitar 2 °C per jam, jangan mendadak.'];
       };
       var perbaruiSuhu = function () {
@@ -302,7 +308,7 @@
         kotakCek.forEach(function (c, i) { if (c.checked) { n++; pilih.push(i); } });
         barCek.style.width = (n / kotakCek.length * 100) + '%';
         tekCek.textContent = n === kotakCek.length
-          ? 'Semua siap! Waktunya menjemput si naga air 🎉'
+          ? 'Semua siap! Waktunya menjemput si naga air 🫧'
           : n + ' dari ' + kotakCek.length + ' perlengkapan siap';
         try { localStorage.setItem('cekBelanja', JSON.stringify(pilih)); } catch (e) {}
       };
@@ -324,12 +330,23 @@
       var lbNext = document.getElementById('lbNext');
       var indeks = 0, pemicu = null;
 
+      // Pastikan kotak foto berada langsung di <body>, bukan di dalam <main> yang beranimasi
+      // (elemen fixed di dalam induk bertransform hanya menutupi induknya, bukan layar).
+      if (kotakFoto.parentNode !== document.body) document.body.appendChild(kotakFoto);
+
+      // Jika file foto tidak ditemukan, beri tahu alih-alih menampilkan kotak kosong
+      lbImg.addEventListener('error', function () {
+        if (!lbImg.getAttribute('src')) return;
+        lbCap.textContent = 'Foto tidak dapat dimuat. Periksa nama file & folder gambar.';
+      });
+
       var tampilFoto = function (i) {
         indeks = (i + fotoBuka.length) % fotoBuka.length;
         var tautanFoto = fotoBuka[indeks];
-        lbImg.src = tautanFoto.getAttribute('href');
-        lbImg.alt = tautanFoto.querySelector('img').alt;
+        var thumb = tautanFoto.querySelector('img');
         lbCap.textContent = tautanFoto.getAttribute('data-cap') || '';
+        lbImg.alt = thumb.alt;
+        lbImg.src = tautanFoto.getAttribute('href');
       };
       var bukaFoto = function (i) {
         pemicu = fotoBuka[i];
@@ -363,6 +380,70 @@
           e.preventDefault();
           f[(pos + (e.shiftKey ? f.length - 1 : 1)) % f.length].focus();
         }
+      });
+    }
+
+    // ---------- 5j. AXOLOTL BISA DICOLEK (beranda & masuk) ----------
+    var seni = document.querySelector('.art');
+    if (seni && seni.querySelector('.eye')) {
+      var svgA = seni.querySelector('svg');
+      var pupil = seni.querySelectorAll('.eye circle');
+      seni.setAttribute('data-colek', ''); seni.setAttribute('tabindex', '0'); seni.setAttribute('role', 'button');
+      seni.setAttribute('aria-label', 'Colek axolotl');
+      // Mata mengikuti kursor / jari
+      if (!kurangiGerak) document.addEventListener('pointermove', function (e) {
+        var r = svgA.getBoundingClientRect();
+        var dx = e.clientX - (r.left + r.width / 2), dy = e.clientY - (r.top + r.height / 2);
+        var j = Math.hypot(dx, dy) || 1, k = Math.min(5, j / 40);
+        pupil.forEach(function (c) { c.style.transform = 'translate(' + (dx / j * k) + 'px,' + (dy / j * k) + 'px)'; });
+      }, { passive: true });
+      var ikon = ['🫧', '💧', '🫧', '🐚'], hitungC = 0;
+      var colek = function (e) {
+        hitungC++;
+        if (kurangiGerak || !seni.animate) return;
+        seni.animate([{ transform: 'scale(1)' }, { transform: 'scale(1.1,.88)' }, { transform: 'scale(.94,1.08)' }, { transform: 'scale(1)' }],
+          { duration: 600, easing: 'ease-out' });
+        seni.classList.add('senang');
+        clearTimeout(seni._t); seni._t = setTimeout(function () { seni.classList.remove('senang'); }, 1400);
+        var r = seni.getBoundingClientRect(), p = seni.offsetParent || document.body, pr = p.getBoundingClientRect();
+        for (var i = 0; i < 6; i++) {
+          var f = document.createElement('span');
+          f.className = 'fx'; f.textContent = ikon[i % ikon.length]; f.setAttribute('aria-hidden', 'true');
+          f.style.left = (r.left - pr.left + r.width * (0.25 + Math.random() * 0.5)) + 'px';
+          f.style.top = (r.top - pr.top + r.height * 0.3) + 'px';
+          p.appendChild(f);
+          var x = (Math.random() - .5) * 120;
+          f.animate([{ transform: 'translate(0,0) scale(.6)', opacity: 1 }, { transform: 'translate(' + x + 'px,-' + (90 + Math.random() * 70) + 'px) scale(1.2)', opacity: 0 }],
+            { duration: 1100 + Math.random() * 500, easing: 'ease-out' }).onfinish = (function (el) { return function () { el.remove(); }; })(f);
+        }
+      };
+      seni.addEventListener('click', colek);
+      seni.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); colek(); } });
+    }
+
+    // ---------- 5k. PENJELAJAH ANATOMI (tentang) ----------
+    var titik = document.querySelectorAll('.hs'), infoA = document.getElementById('anatInfo');
+    if (titik.length && infoA) {
+      var bagian = {
+        insang: ['Insang luar berbulu', 'Tiga pasang insang di kiri-kanan kepala menyerap oksigen langsung dari air. Warnanya merah muda karena banyak pembuluh darah.'],
+        mata: ['Mata kecil tanpa kelopak', 'Penglihatannya terbatas dan tidak bisa berkedip. Axolotl lebih mengandalkan penciuman dan getaran air untuk mencari makan.'],
+        mulut: ['Mulut lebar penyedot', 'Mulutnya dibuka cepat untuk menyedot mangsa. Giginya sangat kecil, jadi makanan ditelan bulat-bulat.'],
+        pipi: ['Kulit halus tanpa sisik', 'Kulitnya tipis dan ikut membantu bernapas. Karena itu axolotl sangat sensitif terhadap air kotor dan sentuhan tangan.']
+      };
+      var dilihat = {}, titikPoin = document.querySelectorAll('#anatDots i');
+      var pilihA = function (g) {
+        var k = g.getAttribute('data-k');
+        titik.forEach(function (t) { t.classList.toggle('on', t.getAttribute('data-k') === k); });
+        dilihat[k] = true;
+        var n = Object.keys(dilihat).length;
+        titikPoin.forEach(function (d, i) { d.classList.toggle('on', i < n); });
+        infoA.querySelector('h3').textContent = bagian[k][0];
+        infoA.querySelector('p').textContent = bagian[k][1] + (n === 4 ? ' Kamu sudah mengenal semua bagian! 🐚' : '');
+        infoA.classList.remove('pop'); void infoA.offsetWidth; infoA.classList.add('pop');
+      };
+      titik.forEach(function (g) {
+        g.addEventListener('click', function () { pilihA(g); });
+        g.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pilihA(g); } });
       });
     }
 
@@ -492,6 +573,138 @@
       });
     }
 
+    // ---------- 6b. DATA AKUN (dipakai oleh halaman daftar & masuk) ----------
+    // CATATAN: ini simulasi tanpa server. Akun disimpan di localStorage browser ini saja,
+    // dan kata sandi disimpan dalam bentuk hash (bukan teks asli). Untuk situs sungguhan,
+    // pendaftaran & login harus diproses di server.
+    var KUNCI_AKUN = 'akunAxolotl';
+    function bacaAkun() {
+      try {
+        var d = JSON.parse(localStorage.getItem(KUNCI_AKUN) || '{}');
+        return (d && typeof d === 'object') ? d : {};
+      } catch (e) { return {}; }
+    }
+    function simpanAkun(data) {
+      try { localStorage.setItem(KUNCI_AKUN, JSON.stringify(data)); return true; }
+      catch (e) { return false; }
+    }
+    function kunciUser(nama) { return String(nama).trim().toLowerCase(); }
+    function buatGaram() {
+      var a = '';
+      for (var i = 0; i < 16; i++) a += Math.floor(Math.random() * 16).toString(16);
+      return a;
+    }
+    // Hash SHA-256 bila tersedia; jika tidak (mis. halaman http biasa), pakai hash sederhana cadangan
+    function hashSandi(garam, sandiTeks) {
+      var teks = garam + ':' + sandiTeks;
+      if (window.crypto && window.crypto.subtle && window.TextEncoder) {
+        return window.crypto.subtle.digest('SHA-256', new TextEncoder().encode(teks)).then(function (buf) {
+          return Array.prototype.map.call(new Uint8Array(buf), function (b) {
+            return ('0' + b.toString(16)).slice(-2);
+          }).join('');
+        });
+      }
+      var h = 5381;
+      for (var i = 0; i < teks.length; i++) h = ((h * 33) ^ teks.charCodeAt(i)) >>> 0;
+      return Promise.resolve('x' + h.toString(16));
+    }
+
+    // ---------- 6c. FORMULIR DAFTAR (hanya di daftar.html) ----------
+    var formDaftar = document.getElementById('registerForm');
+    if (formDaftar) {
+      var kartuD   = document.getElementById('registerCard');
+      var userD    = document.getElementById('regUsername');
+      var sandiD   = document.getElementById('regPassword');
+      var ulangD   = document.getElementById('regConfirm');
+      var tombolD  = document.getElementById('regBtn');
+      var statusD  = document.getElementById('regStatus');
+      var lihatD   = document.getElementById('pwToggle');
+
+      lihatD.addEventListener('click', function () {
+        var tampil = sandiD.type === 'password';
+        sandiD.type = ulangD.type = tampil ? 'text' : 'password';
+        lihatD.setAttribute('aria-pressed', tampil ? 'true' : 'false');
+        lihatD.setAttribute('aria-label', tampil ? 'Sembunyikan kata sandi' : 'Tampilkan kata sandi');
+      });
+
+      var errD = function (input, pesan) {
+        document.getElementById(input.id + '-error').textContent = pesan;
+        if (pesan) input.setAttribute('aria-invalid', 'true'); else input.removeAttribute('aria-invalid');
+        return !pesan;
+      };
+      var cekUserD = function () {
+        var v = userD.value.trim();
+        if (!v) return errD(userD, 'Username wajib diisi.');
+        if (/\s/.test(v)) return errD(userD, 'Username tidak boleh memakai spasi.');
+        if (v.length < 3) return errD(userD, 'Username minimal 3 karakter.');
+        if (bacaAkun()[kunciUser(v)]) return errD(userD, 'Username ini sudah dipakai. Coba yang lain.');
+        return errD(userD, '');
+      };
+      var cekSandiD = function () {
+        if (!sandiD.value) return errD(sandiD, 'Kata sandi wajib diisi.');
+        if (sandiD.value.length < 8) return errD(sandiD, 'Kata sandi minimal 8 karakter.');
+        return errD(sandiD, '');
+      };
+      var cekUlangD = function () {
+        if (!ulangD.value) return errD(ulangD, 'Ulangi kata sandi untuk memastikan.');
+        if (ulangD.value !== sandiD.value) return errD(ulangD, 'Kata sandi tidak sama.');
+        return errD(ulangD, '');
+      };
+      userD.addEventListener('input', function () { if (userD.hasAttribute('aria-invalid')) cekUserD(); });
+      userD.addEventListener('blur', function () { if (userD.value) cekUserD(); });
+      sandiD.addEventListener('input', function () {
+        if (sandiD.hasAttribute('aria-invalid')) cekSandiD();
+        if (ulangD.hasAttribute('aria-invalid')) cekUlangD();
+      });
+      ulangD.addEventListener('input', function () { if (ulangD.hasAttribute('aria-invalid')) cekUlangD(); });
+
+      var statusDaftar = function (teks, jenis) {
+        statusD.textContent = teks;
+        statusD.className = 'form-status' + (jenis ? ' ' + jenis : '');
+      };
+      var getarD = function () {
+        kartuD.classList.remove('shake');
+        void kartuD.offsetWidth;
+        kartuD.classList.add('shake');
+      };
+      kartuD.addEventListener('animationend', function (e) {
+        if (e.animationName === 'shake') kartuD.classList.remove('shake');
+      });
+
+      formDaftar.addEventListener('submit', function (e) {
+        e.preventDefault();
+        statusDaftar('', '');
+        var ok1 = cekUserD(), ok2 = cekSandiD(), ok3 = cekUlangD();
+        if (!ok1 || !ok2 || !ok3) {
+          (!ok1 ? userD : (!ok2 ? sandiD : ulangD)).focus();
+          getarD();
+          return;
+        }
+
+        tombolD.disabled = true;
+        tombolD.classList.add('loading');
+        tombolD.textContent = 'Mendaftarkan…';
+
+        var namaAsli = userD.value.trim();
+        var garam = buatGaram();
+        hashSandi(garam, sandiD.value).then(function (hash) {
+          var semua = bacaAkun();
+          semua[kunciUser(namaAsli)] = { nama: namaAsli, garam: garam, hash: hash };
+          if (!simpanAkun(semua)) throw new Error('simpan');
+          tombolD.classList.remove('loading');
+          tombolD.textContent = 'Berhasil ✓';
+          statusDaftar('Akun berhasil dibuat. Mengalihkan ke halaman masuk…', 'ok');
+          setTimeout(function () { window.location.href = 'login.html'; }, 1100);
+        }).catch(function () {
+          tombolD.disabled = false;
+          tombolD.classList.remove('loading');
+          tombolD.textContent = 'Daftar';
+          statusDaftar('Pendaftaran gagal. Pastikan browser mengizinkan penyimpanan data, lalu coba lagi.', 'err');
+          getarD();
+        });
+      });
+    }
+
     // ---------- 7. FORMULIR LOGIN (hanya di login.html) ----------
     var form = document.getElementById('loginForm');
     if (!form) return;
@@ -518,7 +731,7 @@
       lihatSandi.setAttribute('aria-label', tampil ? 'Sembunyikan kata sandi' : 'Tampilkan kata sandi');
       sandi.focus();
     });
-
+    
     // Validasi
     function tampilkanError(input, pesan) {
       document.getElementById(input.id + '-error').textContent = pesan;
@@ -556,16 +769,21 @@
     }
 
     function berhasil() {
+      // Simpan / hapus username sesuai "Ingat saya" (hanya setelah login benar)
+      try {
+        if (ingat.checked) localStorage.setItem('ingatUsername', username.value.trim());
+        else localStorage.removeItem('ingatUsername');
+      } catch (err) {}
       tombol.classList.remove('loading');
       tombol.textContent = 'Berhasil ✓';
       aturStatus('Berhasil masuk. Mengalihkan…', 'ok');
       setTimeout(function () { window.location.href = 'index.html'; }, 900);
     }
-    function gagal() {
+    function gagal(pesan) {
       tombol.disabled = false;
       tombol.classList.remove('loading');
       tombol.textContent = 'Masuk';
-      aturStatus('Username atau kata sandi salah. Silakan coba lagi.', 'err');
+      aturStatus(pesan || 'Username atau kata sandi salah. Silakan coba lagi.', 'err');
       getarKartu();
     }
 
@@ -586,26 +804,19 @@
       tombol.classList.add('loading');
       tombol.textContent = 'Memproses…';
 
-      // Simpan / hapus username sesuai "Ingat saya"
-      try {
-        if (ingat.checked) localStorage.setItem('ingatUsername', username.value.trim());
-        else localStorage.removeItem('ingatUsername');
-      } catch (err) {}
-
-      // ================================================================
-      // DEMO: bagian di bawah ini hanya simulasi, BELUM memeriksa akun sungguhan.
-      // Ganti dengan permintaan ke server Anda, contohnya:
-      //
-      //   fetch('/api/login', {
-      //     method: 'POST',
-      //     headers: { 'Content-Type': 'application/json' },
-      //     body: JSON.stringify({ username: username.value.trim(), password: sandi.value })
-      //   })
-      //   .then(function (r) { if (!r.ok) throw new Error(); return r.json(); })
-      //   .then(berhasil)
-      //   .catch(gagal);
-      // ================================================================
-      setTimeout(berhasil, 1200);
+      // Periksa ke daftar akun yang sudah terdaftar (lihat bagian 6b).
+      // Username yang belum pernah didaftarkan tidak bisa masuk.
+      var akun = bacaAkun()[kunciUser(username.value)];
+      setTimeout(function () {
+        if (!akun) {
+          gagal('Akun belum terdaftar. Silakan daftar dulu lewat tombol "Daftar sekarang".');
+          return;
+        }
+        hashSandi(akun.garam, sandi.value).then(function (hash) {
+          if (hash === akun.hash) berhasil();
+          else gagal('Kata sandi salah. Silakan coba lagi.');
+        }).catch(function () { gagal(); });
+      }, 700);
     });
   });
 })();

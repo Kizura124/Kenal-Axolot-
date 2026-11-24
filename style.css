@@ -29,25 +29,25 @@
 
 /* Mode gelap: teks terang, latar biru-toska sangat gelap */
 [data-theme="dark"] {
-  --pink-deep:  #ee86ac;
-  --blue:       #11262e;
-  --teal:       #4fb8b2;
-  --ink:        #e6f2f5;
-  --muted:      #a9c0c8;
-  --line:       #28444f;
+  --pink-deep:  #e8a0ba;
+  --blue:       #243a41;
+  --teal:       #6fb3ad;
+  --ink:        #eaf0f0;
+  --muted:      #b6c6c9;
+  --line:       #3e5660;
 
-  --bg:         #0b1a20;
-  --surface:    #142a33;
-  --heading:    #6fd6cf;
-  --btn-bg:     #6fd6cf;
-  --btn-hover:  #93e3dd;
-  --btn-text:   #0b1a20;
-  --nav-bg:     rgba(11,26,32,.92);
-  --note-bg:    #3a2331;
-  --footer-bg:  #071216;
-  --footer-text:#e6f2f5;
-  --ring:       rgba(111,214,207,.16);
-  --shadow:     0 14px 30px rgba(0,0,0,.45);
+  --bg:         #1d2c32;
+  --surface:    #28393f;
+  --heading:    #a9d6d1;
+  --btn-bg:     #8ec9c2;
+  --btn-hover:  #a8d8d2;
+  --btn-text:   #17272c;
+  --nav-bg:     rgba(29,44,50,.92);
+  --note-bg:    #46343e;
+  --footer-bg:  #16252a;
+  --footer-text:#eaf0f0;
+  --ring:       rgba(169,214,209,.14);
+  --shadow:     0 14px 30px rgba(0,0,0,.32);
   color-scheme: dark;
 }
 
@@ -670,9 +670,9 @@ button.btn { border: none; cursor: pointer; font-family: inherit; }
 .photo figcaption { padding: .9rem 1.1rem 1.1rem; font-size: 1rem; color: var(--muted); }
 .lightbox { position: fixed; inset: 0; z-index: 40; display: grid; place-items: center; padding: 1rem; background: rgba(5,15,20,.9); opacity: 0; visibility: hidden; transition: opacity .3s, visibility 0s .3s; }
 .lightbox.open { opacity: 1; visibility: visible; transition: opacity .3s; }
-.lightbox figure { margin: 0; max-width: min(900px, 100%); text-align: center; color: #fff; transform: scale(.92); transition: transform .35s cubic-bezier(.34,1.56,.64,1); }
+.lightbox figure { margin: 0; width: min(900px, 100%); max-width: 100%; text-align: center; color: #fff; transform: scale(.92); transition: transform .35s cubic-bezier(.34,1.56,.64,1); }
 .lightbox.open figure { transform: none; }
-.lightbox img { display: block; max-width: 100%; max-height: 72vh; margin: 0 auto; border-radius: 14px; }
+.lightbox img { display: block; width: auto; height: auto; max-width: 100%; max-height: 72vh; object-fit: contain; margin: 0 auto; border-radius: 14px; }
 .lightbox figcaption { margin-top: .9rem; font-size: 1.05rem; }
 .lb-btn { position: absolute; width: 48px; height: 48px; border-radius: 50%; border: none; cursor: pointer; background: rgba(255,255,255,.16); color: #fff; font-size: 1.8rem; line-height: 1; display: grid; place-items: center; transition: background .2s, transform .2s; }
 .lb-btn:hover { background: rgba(255,255,255,.3); transform: scale(1.08); }
@@ -692,3 +692,55 @@ button.btn { border: none; cursor: pointer; font-family: inherit; }
 /* Rapikan jarak dan garis judul */
 .page-hero + section { padding-top: 2.6rem; }
 [style*="text-align:center"] h2::after { margin-inline: auto; }
+
+
+/* ==========================================================
+   PEMBARUAN: kedalaman (bayangan gambar), animasi pop-up & navigasi, interaksi
+   ========================================================== */
+/* Transisi ganti tema memakai View Transitions (mulus, tanpa patah-patah) */
+::view-transition-old(root), ::view-transition-new(root) { animation-duration: .5s; }
+
+/* Kedalaman: bayangan berlapis pada gambar */
+.hero .art { box-shadow: 0 0 0 14px var(--ring), 0 26px 44px rgba(20,40,50,.22); }
+.art svg, .anat-art svg { filter: drop-shadow(0 12px 14px rgba(20,40,50,.28)); }
+.photo { box-shadow: 0 10px 24px rgba(20,40,50,.16), 0 2px 6px rgba(20,40,50,.12); }
+.photo img { box-shadow: 0 6px 14px rgba(20,40,50,.22); }
+.lightbox img { box-shadow: 0 24px 60px rgba(0,0,0,.55), 0 4px 14px rgba(0,0,0,.4); }
+.lightbox { backdrop-filter: blur(6px); }
+
+/* Navigasi: menu meluncur dengan efek pegas, tautan bergeser + bergaris */
+html.menu-open .drawer { transition: transform .55s cubic-bezier(.3,1.25,.5,1); }
+.menu-overlay { backdrop-filter: blur(4px); }
+.menu-btn:active .bars i { width: 100% !important; }
+.drawer li a { position: relative; transition: background .2s, transform .25s cubic-bezier(.34,1.56,.64,1), padding .2s; }
+.drawer li a:not(.menu-login):hover { padding-left: 1.25rem; transform: translateX(6px); }
+
+/* Pop-up: hasil kuis & skor muncul membal */
+.expl:not([hidden]) { animation: popIn .45s cubic-bezier(.34,1.56,.64,1) both; transform-origin: top left; }
+.quiz-end:not([hidden]) { animation: popIn .6s cubic-bezier(.34,1.56,.64,1) both; }
+.opt.benar { animation: popIn .4s cubic-bezier(.34,1.56,.64,1); }
+.opt.salah { animation: shakeX .4s ease; }
+
+/* Axolotl di beranda: bisa dicolek */
+.art[data-colek] { cursor: pointer; -webkit-tap-highlight-color: transparent; }
+.art.senang .gill { animation-duration: .45s; }
+.fx { position: absolute; pointer-events: none; z-index: 3; font-size: 1.5rem; line-height: 1; }
+
+/* Penjelajah anatomi (tentang) */
+.anat { display: grid; gap: 1.5rem; align-items: center; }
+@media (min-width: 760px) { .anat { grid-template-columns: 1fr 1fr; } }
+.anat-art { background: var(--surface); border: 1px solid var(--line); border-radius: 22px; padding: 1rem; box-shadow: var(--shadow); }
+.anat-art svg { display: block; width: 100%; height: auto; }
+.hs { cursor: pointer; outline: none; }
+.hs-dot { fill: var(--heading); stroke: #fff; stroke-width: 2.5; }
+.hs-ring { fill: none; stroke: var(--heading); stroke-width: 3; transform-box: fill-box; transform-origin: center; animation: hsPulse 1.8s ease-out infinite; }
+.hs:hover .hs-dot, .hs:focus-visible .hs-dot, .hs.on .hs-dot { fill: var(--pink-deep); }
+.hs.on .hs-ring { animation: none; opacity: .0; }
+@keyframes hsPulse { from { transform: scale(.5); opacity: .9; } to { transform: scale(1.5); opacity: 0; } }
+.anat-info { background: var(--surface); border: 1px solid var(--line); border-radius: 18px; padding: 1.4rem; box-shadow: var(--shadow); min-height: 190px; }
+.anat-info h3 { color: var(--heading); margin-bottom: .5rem; }
+.anat-info.pop > h3, .anat-info.pop > p { animation: popIn .4s cubic-bezier(.34,1.56,.64,1) both; }
+.anat-dots { display: flex; gap: .5rem; margin-top: 1rem; }
+.anat-dots i { width: 12px; height: 12px; border-radius: 50%; background: var(--line); transition: background .3s, transform .3s; }
+.anat-dots i.on { background: var(--pink-deep); transform: scale(1.25); }
+@media (prefers-reduced-motion: reduce) { .hs-ring { animation: none; } }

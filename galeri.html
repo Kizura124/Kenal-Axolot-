@@ -12,10 +12,10 @@
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=DM+Serif+Display&display=swap" rel="stylesheet">
 
   <!-- CSS eksternal (satu file untuk semua halaman) -->
-  <link rel="stylesheet" href="style.css?v=4">
+  <link rel="stylesheet" href="style.css?v=6">
 
   <!-- JavaScript eksternal: dimuat di head agar tema terpasang lebih dulu (anti-kedip) -->
-  <script src="script.js?v=4"></script>
+  <script src="script.js?v=6"></script>
 </head>
 
 <body>
@@ -108,24 +108,26 @@
       </div>
     </section>
 
-    <!-- Pratinjau foto layar penuh -->
-    <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Pratinjau foto" aria-hidden="true">
-      <button class="lb-btn lb-close" id="lbClose" type="button" aria-label="Tutup foto">×</button>
-      <button class="lb-btn lb-prev" id="lbPrev" type="button" aria-label="Foto sebelumnya">‹</button>
-      <button class="lb-btn lb-next" id="lbNext" type="button" aria-label="Foto berikutnya">›</button>
-      <figure><img id="lbImg" src="" alt=""><figcaption id="lbCap"></figcaption></figure>
-    </div>
-
     <div class="wrap">
       <nav class="pager" aria-label="Navigasi halaman"><a class="prev" href="perawatan.html"><span class="arr">←</span> Perawatan</a><a class="next" href="tanya.html">Tanya <span class="arr">→</span></a></nav>
     </div>
 
   </main>
 
+  <!-- Pratinjau foto layar penuh.
+     Sengaja diletakkan DI LUAR <main>: <main> memakai animasi (transform), sehingga elemen
+     position:fixed di dalamnya hanya menutupi area <main>, bukan layar. Itu penyebab foto tampak kosong/terpotong. -->
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Pratinjau foto" aria-hidden="true">
+    <button class="lb-btn lb-close" id="lbClose" type="button" aria-label="Tutup foto">×</button>
+    <button class="lb-btn lb-prev" id="lbPrev" type="button" aria-label="Foto sebelumnya">‹</button>
+    <button class="lb-btn lb-next" id="lbNext" type="button" aria-label="Foto berikutnya">›</button>
+    <figure><img id="lbImg" src="" alt=""><figcaption id="lbCap"></figcaption></figure>
+  </div>
+
   <!-- ===== FOOTER ===== -->
   <footer>
     <strong>Dunia Axolotl</strong>
-    <small>Dibuat oleh Ibrahim Ahmad Firdaus<br>Kelas 12 TJKT 2 &copy; <span id="tahun"></span></small>
+    <small>Dibuat dengan 🫧 untuk para pencinta axolotl &copy; <span id="tahun"></span></small>
   </footer>
 
   <!-- Tombol kembali ke atas (muncul setelah halaman di-scroll) -->

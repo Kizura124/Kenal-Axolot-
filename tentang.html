@@ -12,10 +12,10 @@
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=DM+Serif+Display&display=swap" rel="stylesheet">
 
   <!-- CSS eksternal (satu file untuk semua halaman) -->
-  <link rel="stylesheet" href="style.css?v=4">
+  <link rel="stylesheet" href="style.css?v=6">
 
   <!-- JavaScript eksternal: dimuat di head agar tema terpasang lebih dulu (anti-kedip) -->
-  <script src="script.js?v=4"></script>
+  <script src="script.js?v=6"></script>
 </head>
 
 <body>
@@ -71,7 +71,7 @@
       <span class="bubble" aria-hidden="true" style="--s:22px;--l:80%;--t:12s;--dl:1s"></span>
       <div class="wrap">
         <p class="crumb"><a href="index.html">Beranda</a> › Tentang</p>
-        <h1>Kenalan dulu, yuk! <span class="emoji" aria-hidden="true">👋</span></h1>
+        <h1>Kenalan dulu, yuk! <span class="emoji" aria-hidden="true">🦎</span></h1>
         <p class="lead">Si “naga air” yang wajahnya seperti tersenyum terus. Yuk, kenalan sebelum kamu jatuh cinta.</p>
       </div>
     </section>
@@ -84,7 +84,36 @@
           <p>Axolotl (dibaca “aks-o-lotl”) adalah salamander, yaitu hewan amfibi yang menghabiskan seluruh hidupnya di dalam air. Ya, ia <strong>bukan ikan</strong>, meski di Meksiko sering dijuluki “ikan berjalan”. Sepupu jauhnya? Katak.</p>
           <p>Wajahnya seperti sedang tersenyum, matanya kecil dan bulat, dan di kiri-kanan kepalanya tumbuh tiga pasang insang berbulu yang melambai seperti jambul. Imut? Banget. Tapi di balik wajah polos itu tersimpan kemampuan yang bikin para ilmuwan terkagum-kagum (bocoran: ada di halaman Fakta Unik).</p>
         </div>
-        <div class="callout">💡 <strong>Soal nama:</strong> “axolotl” berasal dari bahasa Nahuatl, bahasa suku Aztek, dan sering diartikan “anjing air”. Menurut legenda Aztek, dewa Xolotl pernah menyamar menjadi axolotl supaya lolos dari pengorbanan. Licik, tapi lucu.</div>
+        <div class="callout">🔬 <strong>Soal nama:</strong> “axolotl” berasal dari bahasa Nahuatl, bahasa suku Aztek, dan sering diartikan “anjing air”. Menurut legenda Aztek, dewa Xolotl pernah menyamar menjadi axolotl supaya lolos dari pengorbanan. Licik, tapi lucu.</div>
+      </div>
+    </section>
+
+    <!-- ===== KENALI BAGIAN TUBUH (interaktif) ===== -->
+    <section>
+      <div class="wrap">
+        <h2>Kenali wajahnya, yuk! 🔎</h2>
+        <p class="lead">Ketuk titik yang berdenyut pada axolotl untuk belajar fungsi tiap bagiannya.</p>
+        <div class="anat">
+          <div class="anat-art"><svg viewBox="0 0 320 260" aria-hidden="true">
+            <g class="gill left g1"><line x1="105" y1="115" x2="38" y2="75"  stroke="#e0709a" stroke-width="9" stroke-linecap="round"/><circle cx="36" cy="73" r="8" fill="#e0709a"/></g>
+            <g class="gill left g2"><line x1="102" y1="130" x2="30" y2="128" stroke="#e0709a" stroke-width="9" stroke-linecap="round"/><circle cx="28" cy="128" r="8" fill="#e0709a"/></g>
+            <g class="gill left g3"><line x1="106" y1="145" x2="40" y2="182" stroke="#e0709a" stroke-width="9" stroke-linecap="round"/><circle cx="38" cy="184" r="8" fill="#e0709a"/></g>
+            <g class="gill right g1"><line x1="215" y1="115" x2="282" y2="75"  stroke="#e0709a" stroke-width="9" stroke-linecap="round"/><circle cx="284" cy="73" r="8" fill="#e0709a"/></g>
+            <g class="gill right g2"><line x1="218" y1="130" x2="290" y2="128" stroke="#e0709a" stroke-width="9" stroke-linecap="round"/><circle cx="292" cy="128" r="8" fill="#e0709a"/></g>
+            <g class="gill right g3"><line x1="214" y1="145" x2="280" y2="182" stroke="#e0709a" stroke-width="9" stroke-linecap="round"/><circle cx="282" cy="184" r="8" fill="#e0709a"/></g>
+            <ellipse cx="160" cy="140" rx="100" ry="76" fill="#fbd5e0"/>
+            <ellipse cx="108" cy="162" rx="14" ry="9" fill="#e0709a" opacity=".45"/>
+            <ellipse cx="212" cy="162" rx="14" ry="9" fill="#e0709a" opacity=".45"/>
+            <g class="eye l"><circle cx="122" cy="130" r="8" fill="#1f3a45"/><circle cx="125" cy="127" r="2.5" fill="#fff"/></g>
+            <g class="eye r"><circle cx="198" cy="130" r="8" fill="#1f3a45"/><circle cx="201" cy="127" r="2.5" fill="#fff"/></g>
+            <path d="M130 160 Q160 188 190 160" fill="none" stroke="#1f3a45" stroke-width="5" stroke-linecap="round"/>
+          <g class="hs" data-k="insang" tabindex="0" role="button" aria-label="Insang kiri"><circle class="hs-ring" cx="34" cy="76" r="15"/><circle class="hs-dot" cx="34" cy="76" r="6"/></g><g class="hs" data-k="insang" tabindex="0" role="button" aria-label="Insang kanan"><circle class="hs-ring" cx="286" cy="76" r="15"/><circle class="hs-dot" cx="286" cy="76" r="6"/></g><g class="hs" data-k="mata" tabindex="0" role="button" aria-label="Mata"><circle class="hs-ring" cx="122" cy="130" r="15"/><circle class="hs-dot" cx="122" cy="130" r="6"/></g><g class="hs" data-k="pipi" tabindex="0" role="button" aria-label="Kulit"><circle class="hs-ring" cx="108" cy="164" r="15"/><circle class="hs-dot" cx="108" cy="164" r="6"/></g><g class="hs" data-k="mulut" tabindex="0" role="button" aria-label="Mulut"><circle class="hs-ring" cx="160" cy="176" r="15"/><circle class="hs-dot" cx="160" cy="176" r="6"/></g></svg></div>
+          <div class="anat-info" id="anatInfo" aria-live="polite">
+            <h3>Pilih satu bagian</h3>
+            <p>Mulai dari insang, mata, mulut, atau kulitnya.</p>
+            <div class="anat-dots" id="anatDots" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -112,7 +141,7 @@
     <section>
       <div class="wrap">
         <div class="sec-head">
-          <h2>Rumah aslinya: kanal Xochimilco 🌺</h2>
+          <h2>Rumah aslinya: kanal Xochimilco 🛶</h2>
           <p class="lead">Satu-satunya tempat di bumi tempat axolotl hidup bebas di alam.</p>
         </div>
         <p>Di alam liar, axolotl hanya ditemukan di sistem kanal dan danau di sekitar Xochimilco, dekat Kota Meksiko. Dulu penghuninya melimpah. Sekarang jumlahnya sangat sedikit, sampai statusnya <strong>Sangat Terancam Punah (Critically Endangered)</strong> menurut IUCN.</p>
@@ -130,12 +159,12 @@
     <section class="alt">
       <div class="wrap">
         <div class="sec-head">
-          <h2>Kok bisa awet muda? 🍼</h2>
+          <h2>Kok bisa awet muda? 🧬</h2>
         </div>
         <p>Kebanyakan salamander mengalami metamorfosis: insangnya hilang, lalu mereka pindah ke darat. Axolotl memilih jalan lain. Ia tetap berwujud “anak-anak” seumur hidup, lengkap dengan insang luar dan sirip di ekor. Istilah kerennya <strong>neoteni</strong>.</p>
         <div class="flow">
-          <div class="flow-row"><b>Salamander biasa</b><span class="chip">🥚 Telur</span><span class="arrow">→</span><span class="chip">🐛 Larva di air</span><span class="arrow">→</span><span class="chip">🌲 Dewasa di darat</span></div>
-          <div class="flow-row"><b>Axolotl</b><span class="chip">🥚 Telur</span><span class="arrow">→</span><span class="chip">🐛 Larva di air</span><span class="arrow">→</span><span class="chip pink">🌊 Dewasa yang tetap di air</span></div>
+          <div class="flow-row"><b>Salamander biasa</b><span class="chip">🥚 Telur</span><span class="arrow">→</span><span class="chip">🐟 Larva di air</span><span class="arrow">→</span><span class="chip">🌿 Dewasa di darat</span></div>
+          <div class="flow-row"><b>Axolotl</b><span class="chip">🥚 Telur</span><span class="arrow">→</span><span class="chip">🐟 Larva di air</span><span class="arrow">→</span><span class="chip pink">🌊 Dewasa yang tetap di air</span></div>
         </div>
         <p>Dalam kondisi tertentu axolotl bisa dipaksa berubah bentuk, tetapi itu jarang terjadi dan biasanya membuat kesehatannya terganggu. Karena itu para pemelihara membiarkannya apa adanya.</p>
       </div>
@@ -145,7 +174,7 @@
     <section>
       <div class="wrap">
         <div class="sec-head">
-          <h2>Warna-warni axolotl 🎨</h2>
+          <h2>Warna-warni axolotl 🪸</h2>
           <p class="lead">Di alam liar kebanyakan berwarna gelap. Warna-warna lucu yang kamu lihat di foto dan toko hewan hasil dari pengembangbiakan.</p>
         </div>
         <div class="morphs">
@@ -163,7 +192,7 @@
     <section class="alt">
       <div class="wrap">
         <div class="sec-head">
-          <h2>Perjalanan hidup axolotl 🗓️</h2>
+          <h2>Perjalanan hidup axolotl 🌱</h2>
           <p class="lead">Dari butiran telur sampai si naga air dewasa.</p>
         </div>
         <ol class="timeline">
@@ -184,7 +213,7 @@
   <!-- ===== FOOTER ===== -->
   <footer>
     <strong>Dunia Axolotl</strong>
-    <small>Dibuat oleh Ibrahim Ahmad Firdaus<br>Kelas 12 TJKT 2 &copy; <span id="tahun"></span></small>
+    <small>Dibuat dengan 🫧 untuk para pencinta axolotl &copy; <span id="tahun"></span></small>
   </footer>
 
   <!-- Tombol kembali ke atas (muncul setelah halaman di-scroll) -->
